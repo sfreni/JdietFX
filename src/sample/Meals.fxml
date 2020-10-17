@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<GridPane vgap="10" hgap="10" fx:controller="sample.DialogController"
+          xmlns:fx="http://javafx.com/fxml" fx:id="mealsGrid">
+
+            <Label text="1° Pasto:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <TextField   GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+            <Label text="Kcal Totali:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <TextField maxWidth="80" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+            <Label text="Kcal Carboidrati:" GridPane.rowIndex="0" GridPane.columnIndex="4"/>
+            <TextField maxWidth="80" GridPane.rowIndex="0" GridPane.columnIndex="5"/>
+            <Label text="Kcal Proteine:" GridPane.rowIndex="0" GridPane.columnIndex="6"/>
+            <TextField maxWidth="80" GridPane.rowIndex="0" GridPane.columnIndex="7"/>
+            <Label text="Kcal Grasso:" GridPane.rowIndex="0" GridPane.columnIndex="8"/>
+            <TextField maxWidth="80" GridPane.rowIndex="0" GridPane.columnIndex="9"/>
+
+            <Button text="Modifica" GridPane.rowIndex="0" GridPane.columnIndex="10" onAction="#modifyMeals" > </Button>
+
+
+        </GridPane>

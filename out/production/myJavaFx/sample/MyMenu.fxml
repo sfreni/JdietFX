@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<BorderPane fx:id="mainBorderPane" fx:controller="sample.MenuController"
+            xmlns:fx="http://javafx.com/fxml">
+<top>
+    <MenuBar >
+        <menus>
+            <Menu id="fileMenu" fx:id="fileMenu" mnemonicParsing="false" text="File">
+                <items>
+                    <MenuItem id="newFileItem" fx:id="newMeals" text="Gestisci pasti Ctrl+G" onAction="#handleMeals"/>
+                    <MenuItem id="openFileItem" fx:id="openFoodItem" text="Gestisci alimenti Ctrl+A" />
+                    <MenuItem id="openFileItem" fx:id="printMeals" text="Stampa riepilogo giornaliero Ctrl+S" />
+                    <MenuItem id="saveFileItem" fx:id="quit" text="Esci Ctrl+S" />
+                </items>
+            </Menu>
+            <Menu id="editionMenu" fx:id="editionMenu" mnemonicParsing="false" text="Edit">
+            </Menu>
+            <Menu id="settingsMenu" fx:id="settingsMenu" mnemonicParsing="false" text="Settings">
+            </Menu>
+            <Menu id="helpMenu" fx:id="helpMenu" mnemonicParsing="false" text="Help">
+            </Menu>
+        </menus>
+    </MenuBar>
+</top>
+
+
+        <center>
+
+                <HBox>
+                    <Label text="JCalculateCal">
+                        <font>
+                            <Font name="Times New Roman bold" size="40"/>
+                        </font>
+                    </Label>
+                    
+
+
+                    <ImageView  fitHeight="150.0" fitWidth="200.0"
+                                layoutX="69.0" layoutY="322.0"
+
+                                preserveRatio="true">
+                        <image>
+                            <Image url="@fruit-main.jpg" />
+                        </image>
+                    </ImageView>
+        </HBox>
+
+        </center>
+
+<!--        <GridPane vgap="10" hgap="10">-->
+<!--            <Label text="Short Description:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>-->
+<!--            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1"/>-->
+<!--            <Label text="Details:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>-->
+<!--            <TextArea GridPane.rowIndex="1" GridPane.columnIndex="1"/>-->
+<!--            <Label text="Deadline:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>-->
+<!--            <DatePicker GridPane.rowIndex="2" GridPane.columnIndex="1"/>-->
+<!--        </GridPane>-->
+
+
+
+        </BorderPane>
