@@ -38,7 +38,7 @@ public class Controller {
         } else {
             try{
                 Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("MyMenu.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/MyMenu.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 930, 500);
                 JMetro jMetro = new JMetro(Style.LIGHT);

@@ -19,7 +19,7 @@ public class MenuController {
     protected void handleMeals(ActionEvent event) {
         try {
             Stage newStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Meals.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Meals.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 1110, 500);
 
@@ -39,7 +39,7 @@ public class MenuController {
         protected void handleFood(ActionEvent event) {
             try{
                 Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("HandleFood.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/HandleFood.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 1040, 630);
                 JMetro jMetro = new JMetro(Style.LIGHT);

@@ -145,7 +145,7 @@ public class HandleFoodTable {
             try {
                 ControlHandleFoodDetail.isNewFood = true;
                 Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("prova.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/prova.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 410, 310);
 
@@ -251,7 +251,7 @@ public class HandleFoodTable {
         try {
             ControlHandleFoodDetail.isNewFood = true;
             Stage newStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("HandleFoodDetail.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/HandleFoodDetail.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 410, 310);
 
@@ -284,7 +284,7 @@ public class HandleFoodTable {
                 ControlHandleFoodDetail.rowModifyRecord = tbDietItems.getItems().get(row).getId();
                 ControlHandleFoodDetail.isNewFood = false;
                 Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("HandleFoodDetail.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/HandleFoodDetail.fxml"));
                 Parent root = loader.load();
                 Scene scene = new Scene(root, 410, 310);
                 newStage.initModality(Modality.APPLICATION_MODAL);

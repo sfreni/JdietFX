@@ -201,7 +201,7 @@ public class DialogModifyMeals {
         try {
 
             Stage newStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("tableViews.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/tableViews.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 930, 630);
             JMetro jMetro = new JMetro(Style.LIGHT);

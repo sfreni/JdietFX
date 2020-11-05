@@ -79,7 +79,7 @@ public class DialogController {
         try {
             DialogModifyMeals.isNewMeal=0;
             Stage newStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("modifymeals.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 1250, 400);
             newStage.initModality(Modality.APPLICATION_MODAL);
@@ -113,7 +113,7 @@ public class DialogController {
         try {
             DialogModifyMeals.isNewMeal=1;
             Stage newStage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("modifymeals.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root, 1250, 400);
             JMetro jMetro = new JMetro(Style.LIGHT);
