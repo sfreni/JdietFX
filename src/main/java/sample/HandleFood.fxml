@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:id="anchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="sample.HandleFoodTable">
+
+    <TableView fx:id="tbDietItems" layoutX="33.0" layoutY="54.0" prefHeight="518.0" prefWidth="870">
+        <columns>
+            <TableColumn fx:id="id" text="ID" visible="false">
+            </TableColumn>
+            <TableColumn fx:id="unitFood" text="Alimento">
+            </TableColumn>
+            <TableColumn fx:id="totKcal" text="Tot Kcal" prefWidth="120">
+            </TableColumn>
+            <TableColumn fx:id="grCarboidrati" text="Gr. Carboidrati" prefWidth="120">
+            </TableColumn>
+            <TableColumn fx:id="grProtein" text="Gr. Proteine" prefWidth="120">
+            </TableColumn>
+            <TableColumn fx:id="grGrassi" text="Gr. Grassi" prefWidth="120">
+            </TableColumn>
+            <TableColumn fx:id="grFiber" text="Gr. Fibre" prefWidth="100">
+            </TableColumn>
+
+        </columns>
+
+
+
+    </TableView>
+    <TextField fx:id="filterField" layoutX="99.0" layoutY="18.0" prefWidth="200" />
+
+
+    <Label layoutX="33.0" layoutY="22.0" text="Cerca: " />
+
+
+
+    <Button fx:id="addButton"  layoutX="920.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Aggiungi"   onAction="#newFood" />
+    <Button  fx:id="modifyButton"  layoutX="920.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modifica"  onAction="#modifyFood" />
+    <Button fx:id="deleteButton"   layoutX="920.0" layoutY="116.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Elimina " />
+    <Button fx:id="cancelButton"  layoutX="920.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Chiudi" />
+    <Button fx:id="sampleButton"  layoutX="920.0" layoutY="176.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Chiudi" />
+
+</AnchorPane>
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="426.0" prefWidth="674.0" fx:controller="sample.DialogController"
+            xmlns:fx="http://javafx.com/fxml" fx:id="mealsGrid">
+
+        <children>
+
+
+            <Label layoutX="127.0" layoutY="18.0" text="Kcal Totali:" /><TextField layoutX="223.0" layoutY="14.0" maxWidth="100" fx:id="TKcalOverall" disable="true" style="-fx-text-fill: #000000;-fx-background-color: #FFFFFF;  "/>
+
+            <TableView fx:id="tbMealsItems" layoutX="127.0" layoutY="56.0" prefHeight="400.0" prefWidth="840.0">
+                <columns>
+                    <TableColumn fx:id="id" text="ID" visible="false" >
+                    </TableColumn>
+                    <TableColumn  fx:id="meals" text="Nome Pasto" prefWidth="160">
+                    </TableColumn>
+                    <TableColumn fx:id="mealsHour" text="Orario" prefWidth="150">
+                    </TableColumn>
+                    <TableColumn fx:id="totKCal" text="Tot Kcal" prefWidth="140">
+                    </TableColumn>
+                    <TableColumn fx:id="grCarboidrati" text="Gr. Carboidrati" prefWidth="150">
+                    </TableColumn>
+                    <TableColumn fx:id="grProtein" text="Gr. Proteine" prefWidth="130">
+                    </TableColumn>
+                    <TableColumn fx:id="grGrassi" text="Gr. Grassi" prefWidth="100">
+                    </TableColumn>
+                </columns>
+
+
+            </TableView>
+
+
+            <Button layoutX="990.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Aggiungi"  onAction="#newMeals" />
+            <Button layoutX="990.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modifica"  onAction="#modifyMeals" />
+            <Button layoutX="990.0" layoutY="116.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Elimina "  onAction="#deleteMeals" />
+            <Button layoutX="990.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Chiudi" onAction="#closeThisScreen" />
+        </children>
+    </AnchorPane>
