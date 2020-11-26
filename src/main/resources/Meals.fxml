@@ -8,9 +8,9 @@
         <children>
 
 
-            <Label layoutX="127.0" layoutY="18.0" text="Kcal Totali:" /><TextField layoutX="223.0" layoutY="14.0" maxWidth="100" fx:id="TKcalOverall" disable="true" style="-fx-text-fill: #000000;-fx-background-color: #FFFFFF;  "/>
+            <Label layoutX="127.0" layoutY="18.0" text="Kcal Totali:" /><TextField layoutX="223.0" layoutY="14.0" maxWidth="100" fx:id="tkcalOverall" disable="true" style="-fx-text-fill: #000000;-fx-background-color: #FFFFFF;  "/>
 
-            <TableView fx:id="tbMealsItems" layoutX="127.0" layoutY="56.0" prefHeight="400.0" prefWidth="840.0">
+            <TableView fx:id="tbMealsItems" layoutX="127.0" layoutY="56.0" prefHeight="400.0" prefWidth="990.0">
                 <columns>
                     <TableColumn fx:id="id" text="ID" visible="false" >
                     </TableColumn>
@@ -26,15 +26,17 @@
                     </TableColumn>
                     <TableColumn fx:id="grGrassi" text="Gr. Grassi" prefWidth="100">
                     </TableColumn>
+                    <TableColumn fx:id="grFibre" text="Gr. Fibre" prefWidth="100">
+                    </TableColumn>
                 </columns>
 
 
             </TableView>
 
 
-            <Button layoutX="990.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Aggiungi"  onAction="#newMeals" />
-            <Button layoutX="990.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modifica"  onAction="#modifyMeals" />
-            <Button layoutX="990.0" layoutY="116.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Elimina "  onAction="#deleteMeals" />
-            <Button layoutX="990.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Chiudi" onAction="#closeThisScreen" />
+            <Button layoutX="1140.0" layoutY="56.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Aggiungi"  onAction="#newMeals" />
+            <Button layoutX="1140.0" layoutY="86.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Modifica"  onAction="#modifyMeals" />
+            <Button layoutX="1140.0" layoutY="116.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Elimina "  onAction="#deleteMeals" />
+            <Button layoutX="1140.0" layoutY="146.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Chiudi" onAction="#closeThisScreen" />
         </children>
     </AnchorPane>

@@ -3,18 +3,18 @@ package sample;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -31,14 +31,16 @@ public class DialogController {
     public static final String COLUMN_CARBOHIDRATE = "GRCARB";
     public static final String COLUMN_PROTEINS = "GRPRO";
     public static final String COLUMN_FAT = "GRGRA";
-    public static final String MEALS = "MEALS";
+    public static final String COLUMN_FIB = "GRFIB";
+    public static final String TABLE_MEALS = "MEALS";
     public static final String MEALS_CONFIG = "MEALS_CONFIG";
     public static final String COLUMN_ID_MEALS = "ID_MEALS";
-
+    private static final Logger LOG = LoggerFactory.getLogger(DialogController.class);
     public static Meal mealChoose; //E' un oggetto transitorio che consente di gestire la modifica nel DialogModifyMeals
 
     @FXML
     protected TableView<Meal> tbMealsItems;
+
     @FXML
     protected TableColumn<Meal, Integer> id;
     @FXML
@@ -54,7 +56,9 @@ public class DialogController {
     @FXML
     protected TableColumn<Meal, Integer> grGrassi;
     @FXML
-    protected TextField TKcalOverall;
+    protected TableColumn<Meal, Integer> grFibre;
+    @FXML
+    protected TextField tkcalOverall;
 
 
     @FXML
@@ -67,7 +71,7 @@ public class DialogController {
         grCarboidrati.setCellValueFactory(new PropertyValueFactory<>("grCarbo"));
         grProtein.setCellValueFactory(new PropertyValueFactory<>("grPro"));
         grGrassi.setCellValueFactory(new PropertyValueFactory<>("grFat"));
-        //public Meal(String idMeal, String nameMeal, String hourMeal, String totKCal, String grCarbo, String grPro, String grFat) {
+        grFibre.setCellValueFactory(new PropertyValueFactory<>("grFib"));
         loadValues();
 
 
@@ -81,7 +85,7 @@ public class DialogController {
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 1250, 400);
+            Scene scene = new Scene(root, 1370, 400);
             newStage.initModality(Modality.APPLICATION_MODAL);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(scene);
@@ -90,7 +94,7 @@ public class DialogController {
 
             newStage.showAndWait();
         } catch (IOException e) {
-            System.out.println("Couldn't load the dialog");
+            LOG.error("Couldn't load the dialog");
             e.printStackTrace();
 
         }
@@ -115,15 +119,16 @@ public class DialogController {
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 1250, 400);
+            Scene scene = new Scene(root, 1370, 400);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(scene);
+
             newStage.setTitle("Modifica Pasto");
             newStage.setScene(scene);
-            newStage.initModality(Modality.APPLICATION_MODAL);
+
             newStage.showAndWait();
         } catch (IOException e) {
-            System.out.println("Couldn't load the dialog");
+            LOG.error("Couldn't load the dialog");
             e.printStackTrace();
         }
 
@@ -135,7 +140,6 @@ public class DialogController {
             Alert a = new Alert(Alert.AlertType.NONE);
             a.setAlertType(Alert.AlertType.ERROR);
             a.setContentText("Si prega di selezionare l'elemento desiderato prima di cliccare il pulsante Modifica");
-            // show the dialog
             a.show();
 
         }
@@ -144,65 +148,50 @@ public class DialogController {
 
     }
 
-
-
-
-
-
-
-
-
-
         @FXML
     protected void closeThisScreen(ActionEvent event) {
         Stage stage = (Stage) tbMealsItems.getScene().getWindow();
         stage.close();
-        stage=null;
+
     }
 
     protected void loadValues(){
-            try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
+        String sql="SELECT MEALS.ID, MEALS.NAME_MEALS, MEALS.HOUR, SUM([GRAMS]*[CAR])/100 as GRCARB, \n" +
+                "sum([GRAMS]*[PRO])/100 as GRPRO, sum([GRAMS]*[GRA])/100 AS GRGRA, sum([GRAMS]*[FIB])/100 AS GRFIB, SUM([GRAMS]*[KC])/100 AS TKCAL\n" +
+                " FROM MEALS INNER JOIN MEALS_CONFIG ON MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS AND \n" +
+                "MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS \n" +
+                "INNER JOIN ALIMENTI ON MEALS_CONFIG.ID_FOOD = ALIMENTI.ID_Alim GROUP BY MEALS.ID, MEALS.NAME_MEALS, MEALS.HOUR ORDER BY MEALS.HOUR";
 
-            Statement statement = conn.createStatement();
-            //ResultSet results = statement.executeQuery("SELECT * FROM MEALS  ORDER BY "+ COLUMN_ID +" ASC ");
-            ResultSet results = statement.executeQuery("SELECT MEALS.ID, MEALS.NAME_MEALS, MEALS.HOUR, SUM([GRAMS]*[CAR])/100 as GRCARB, \n" +
-                    "sum([GRAMS]*[PRO])/100 as GRPRO, sum([GRAMS]*[GRA])/100 AS GRGRA, SUM([GRAMS]*[KC])/100 AS TKCAL\n" +
-                    " FROM MEALS INNER JOIN MEALS_CONFIG ON MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS AND \n" +
-                    "MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS AND MEALS.ID = MEALS_CONFIG.ID_MEALS \n" +
-                    "INNER JOIN tb_alim ON MEALS_CONFIG.ID_FOOD = tb_alim.ID_Alim GROUP BY MEALS.ID, MEALS.NAME_MEALS, MEALS.HOUR ORDER BY MEALS.HOUR");
-
+try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                ResultSet results = conn.createStatement().executeQuery(sql);) {
             ObservableList<Meal> observableArrayList= FXCollections.observableArrayList();
-            //observableArrayList = tbMealsItems.getItems();
 
             while (results.next()) {
 
                 observableArrayList.add(new Meal(results.getString(COLUMN_ID), results.getString(COLUMN_NAME_MEALS), results.getString(COLUMN_MEALS_HOUR), (results.getString(COLUMN_TOTKCAL)),
-                        results.getString(COLUMN_CARBOHIDRATE), results.getString(COLUMN_PROTEINS), results.getString(COLUMN_FAT)));
+                        results.getString(COLUMN_CARBOHIDRATE), results.getString(COLUMN_PROTEINS), results.getString(COLUMN_FAT), results.getString(COLUMN_FIB) ));
             }
             tbMealsItems.setItems(observableArrayList);
-            results.close();
+
             int sumTotKcal=0;
             for(Meal meal: observableArrayList){
                 sumTotKcal+=Integer.parseInt(meal.getTotKCal());
             }
-            TKcalOverall.setText(Integer.toString(sumTotKcal));
+            tkcalOverall.setText(Integer.toString(sumTotKcal));
 
-            tbMealsItems.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent click) {
-                    if (click.getClickCount() >= 1) {
-                        if (click.getClickCount() >= 2) {
-                            modifyMeals(new ActionEvent());//                    okButton.fire();
-                        }
+            tbMealsItems.setOnMouseClicked(click -> {
 
+                    if (click.getClickCount() >= 2) {
+                        modifyMeals(new ActionEvent());
                     }
-                }
+
+
             });
 
 
         } catch (
                 SQLException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
+            LOG.error(("Something went wrong: " + e.getMessage()));
             e.printStackTrace();
         }
 
@@ -231,16 +220,17 @@ public class DialogController {
             int row = pos.getRow();
             mealChoose = tbMealsItems.getItems().get(row);
 
-            try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
-                Statement statement = conn.createStatement();
                 String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG +"  WHERE "+ COLUMN_ID_MEALS +" = " + DialogController.mealChoose.getIdMeal();
-                statement.execute(sqlDeleteMealConfig);
-                statement.close();
-                statement = conn.createStatement();
-                String sqlDeleteMeal = "DELETE FROM " + MEALS +"  WHERE "+ COLUMN_ID +" = " + DialogController.mealChoose.getIdMeal();
-                statement.execute(sqlDeleteMeal);
+                String sqlDeleteMeal = "DELETE FROM " + TABLE_MEALS +"  WHERE "+ COLUMN_ID +" = " + DialogController.mealChoose.getIdMeal();
+            try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                Statement statementConfig = conn.createStatement();
+                Statement statementMeal = conn.createStatement();
+                ) {
+
+                statementConfig.execute(sqlDeleteMealConfig);
+                statementMeal.execute(sqlDeleteMeal);
             } catch (SQLException e) {
-                System.out.println(e);
+                LOG.error(e.getMessage());
             }
 
             loadValues();
@@ -273,19 +263,17 @@ public class DialogController {
         private String grCarbo;
         private String grPro;
         private String grFat;
+        private String grFib;
 
-        public Meal(String idMeal, String nameMeal, String hourMeal, String totKCal, String grCarbo, String grPro, String grFat) {
+        public Meal(String idMeal, String nameMeal, String hourMeal, String totKCal, String grCarbo, String grPro, String grFat,String grFib) {
             this.idMeal = idMeal;
             this.nameMeal = nameMeal;
             this.hourMeal = hourMeal;
-
             this.totKCal = totKCal;
-           // Convertdouble = Math.round(Double.parseDouble(grCarbo)); //rimuovo i senza senso decimali
             this.grCarbo =grCarbo;
-         //   Convertdouble = Math.round(Double.parseDouble(grPro)); //rimuovo i senza senso decimali
             this.grPro = grPro;
-       //     Convertdouble = Math.round(Double.parseDouble(grFat)); //rimuovo i senza senso decimali
             this.grFat = grFat;
+            this.grFib = grFib;
         }
 
         public String getIdMeal() {
@@ -314,6 +302,9 @@ public class DialogController {
 
         public String getGrFat() {
             return grFat;
+        }
+        public String getGrFib() {
+            return grFib;
         }
     }
 

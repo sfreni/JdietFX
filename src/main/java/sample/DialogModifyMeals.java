@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +16,8 @@ import javafx.stage.Stage;
 import javafx.util.converter.DateTimeStringConverter;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
@@ -28,7 +31,7 @@ public class DialogModifyMeals {
     public static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
     public static final String MEALS = "MEALS";
     public static final String MEALS_CONFIG = "MEALS_CONFIG";
-    public static final String TB_ALIM = "tb_alim";
+    public static final String ALIMENTI = "ALIMENTI";
     public static final String COLUMN_ID = "ID";
     public static final String COLUMN_ID_MEALS = "ID_MEALS";
     public static final String COLUMN_NAME_MEALS = "NAME_MEALS";
@@ -41,13 +44,13 @@ public class DialogModifyMeals {
     public static final String COLUMN_CARBOHIDRATE = "CAR";
     public static final String COLUMN_PROTEINS = "PRO";
     public static final String COLUMN_FAT = "GRA";
+    public static final String COLUMN_FIBER = "FIB";
     static ArrayList<HBox> hboxList = new ArrayList<>();
     static int countButton; //Conta il numero delle righe ogni volta che viene cliccato (+)
     static int isNewMeal=0; //Conta il numero delle righe ogni volta che viene cliccato (+)
     private int pressButton;
     private int textValueFocusIn;
-
-
+    private static final Logger LOG = LoggerFactory.getLogger(DialogModifyMeals.class);
 
     @FXML
     protected BorderPane borderPane;
@@ -82,9 +85,8 @@ public class DialogModifyMeals {
         hboxList=new ArrayList<>();
         countButton=0;
         if(isNewMeal==0){
-        addTextFields();}       else
-            {
-
+        addTextFields();
+        }else{
                 modifyTextFields();
                 deleteButton.setVisible(true);
         }
@@ -94,7 +96,8 @@ public class DialogModifyMeals {
             hourValue = hour.getText();
 
         } catch (ParseException parsexception) {
-            System.out.println(parsexception);
+            LOG.error("Errore: ",parsexception);
+
 
         }
         nameMeals.setPromptText("Inserire il nome del pasto");
@@ -128,7 +131,7 @@ public class DialogModifyMeals {
             }else {
                 if(!verifyNameMeal()) {
                     if (isNewMeal != 0) {
-                        deleteData(hboxList);
+                        deleteData();
                     }
                     savingData(hboxList);
                     hboxList = new ArrayList<>();
@@ -144,16 +147,12 @@ public class DialogModifyMeals {
 
 
         deleteButton.setOnAction(e -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Eliminazione Pasto");
-            alert.setHeaderText("Stai per eliminare il pasto visualizzato");
-            alert.setContentText("Sei sicuro?");
-            alert.getDialogPane().setPrefSize(350, 200);
+            Alert alert = deleteAlert();
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK) {
 
 
-                    deleteData(hboxList);
+                    deleteData();
                     hboxList = new ArrayList<>();
                     countButton = 0;
 
@@ -184,6 +183,15 @@ public class DialogModifyMeals {
 
     }
 
+    private Alert deleteAlert() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Eliminazione Pasto");
+        alert.setHeaderText("Stai per eliminare il pasto visualizzato");
+        alert.setContentText("Sei sicuro?");
+        alert.getDialogPane().setPrefSize(350, 200);
+        return alert;
+    }
+
     private void dialogError(String declaration) {
         Alert a = new Alert(Alert.AlertType.NONE);
         a.setAlertType(Alert.AlertType.ERROR);
@@ -203,7 +211,7 @@ public class DialogModifyMeals {
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/tableViews.fxml"));
             Parent root = loader.load();
-            Scene scene = new Scene(root, 930, 630);
+            Scene scene = new Scene(root, 1080, 630);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(scene);
             newStage.setTitle("Selezionare l'alimento desiderato");
@@ -212,12 +220,13 @@ public class DialogModifyMeals {
             newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.showAndWait();
         } catch (IOException e) {
-            System.out.println("Couldn't load the dialog" + e );
+
+            LOG.error("Couldn't load the dialog", e );
             return;
         }
 
-        if (mealsTablesController.foodchoose != null ) {
-            setFoodValues(mealsTablesController.foodchoose, hboxList.get(pressButton));
+        if (MealsTablesController.foodchoose != null ) {
+            setFoodValues(MealsTablesController.foodchoose, hboxList.get(pressButton));
             calculateTotKcal(hboxList);
             okButton.setDisable(false);
         }
@@ -230,11 +239,11 @@ public class DialogModifyMeals {
 
         int buttonPressed = countButton;
 
-        if (mealsTablesController.foodchoose != null || countButton == 0) {
+        if (MealsTablesController.foodchoose != null || countButton == 0) {
 
             HBox hbox1 = new HBox();
             hbox1.setSpacing(10);
-
+            hbox1.setAlignment(Pos.BASELINE_LEFT);
             vboxMeals.setPadding(new Insets(15, 12, 15, 12));
             vboxMeals.getChildren().add(hbox1);
 
@@ -245,7 +254,6 @@ public class DialogModifyMeals {
             Label label1 = new Label();
             label1.setText("Alimento:");
             TextField textField1 = new TextField();
-            //disable="true" style="-fx-text-fill: #000000;-fx-background-color: #FFFFFF;  "
 
             textField1.setDisable(true);
             textField1.setStyle("-fx-text-fill: #000000;-fx-background-color: #FFFFFF; ");
@@ -294,6 +302,16 @@ public class DialogModifyMeals {
             textField6.setDisable(true);
             textField6.setStyle("-fx-text-fill: #000000;-fx-background-color: #FFFFFF; ");
 
+            Label label7 = new Label();
+            label7.setText("Gr. Fibre:");
+            TextField textField7 = new TextField();
+            textField7.setMaxWidth(80);
+            textField7.setDisable(true);
+            textField7.setStyle("-fx-text-fill: #000000;-fx-background-color: #FFFFFF; ");
+
+
+
+
             textField2.focusedProperty().addListener((obs, oldVal, inFocus) -> {
 
                 if (inFocus) {
@@ -301,7 +319,7 @@ public class DialogModifyMeals {
 
                 } else {
 
-                    updateKcalories(textField2, textField3, textField4, textField5, textField6,textValueFocusIn);
+                    updateKcalories(textField2, textField3, textField4, textField5, textField6,textField7,textValueFocusIn);
                     calculateTotKcal(hboxList);
 
                 }
@@ -311,11 +329,10 @@ public class DialogModifyMeals {
             addButton.setText("+");
             addButton.setOnAction(e -> {
                         addTextFields();
-//
+
                 if(countButton>=10){
                     borderPane.getScene().getWindow().setHeight(borderPane.getScene().getWindow().getHeight()+50);
                 }
-                //                borderPane.getScene().getWindow().sizeToScene();
                                        }
             );
             hbox1.getChildren().add(textId);
@@ -332,7 +349,11 @@ public class DialogModifyMeals {
             hbox1.getChildren().add(textField5);
             hbox1.getChildren().add(label6);
             hbox1.getChildren().add(textField6);
+            hbox1.getChildren().add(label7);
+            hbox1.getChildren().add(textField7);
+
             hbox1.getChildren().add(addButton);
+
             if (countButton != 0) {
 
                 Button minusButton = new Button();
@@ -341,8 +362,8 @@ public class DialogModifyMeals {
                     pressButton = buttonPressed;
                     hbox1.getChildren().clear();
 
-                    mealsTablesController.foodchoose = new mealsTablesController.Food("0", "0", "0",
-                            "0", "0", "0"); //creo un oggetto vuoto per far funzionare il pulsante "+" che fa un check sull'esistenza dell'oggetto.
+                    MealsTablesController.foodchoose = new MealsTablesController.Food("0", "0", "0",
+                            "0", "0", "0","0"); //creo un oggetto vuoto per far funzionare il pulsante "+" che fa un check sull'esistenza dell'oggetto.
 
                         calculateTotKcal(hboxList);
                 });
@@ -353,7 +374,7 @@ public class DialogModifyMeals {
 
             hboxList.add(hbox1);
 
-            mealsTablesController.foodchoose = null;
+            MealsTablesController.foodchoose = null;
 
 
             countButton++;
@@ -362,9 +383,8 @@ public class DialogModifyMeals {
 
     }
 
-    private void updateKcalories(TextField textField2, TextField textField3, TextField textField4, TextField textField5, TextField textField6,int textValueFocusIn) {
+    private void updateKcalories(TextField textField2, TextField textField3, TextField textField4, TextField textField5, TextField textField6, TextField textField7, int textValueFocusIn) {
 
- //       System.out.println(textField2.getText()+" "+textField3.getText()+" "+textField4.getText()+" "+textField5.getText()+" "+textField6.getText());
         try {
             int getVerifyValue = Integer.parseInt(textField2.getText());
             if (getVerifyValue <= 0) {
@@ -375,6 +395,7 @@ public class DialogModifyMeals {
                 textField4.setText(setTextValues(textField4, Integer.parseInt(textField2.getText()), textValueFocusIn));
                 textField5.setText(setTextValues(textField5, Integer.parseInt(textField2.getText()), textValueFocusIn));
                 textField6.setText(setTextValues(textField6, Integer.parseInt(textField2.getText()), textValueFocusIn));
+                textField7.setText(setTextValues(textField7, Integer.parseInt(textField2.getText()), textValueFocusIn));
 
                 int totKcalValue = (int) (Double.parseDouble(textField4.getText()) * 4 + Double.parseDouble(textField5.getText()) * 4 + Double.parseDouble(textField6.getText()) * 9);
 
@@ -389,8 +410,7 @@ public class DialogModifyMeals {
     }
 
     @FXML
-    protected void setFoodValues(mealsTablesController.Food foodNameBeUsed, HBox hbox) {
-
+    protected void setFoodValues(MealsTablesController.Food foodNameBeUsed, HBox hbox) {
         TextField foodIdValues = (TextField) hbox.getChildren().get(0);
         foodIdValues.setText(Integer.toString(foodNameBeUsed.getId()));
         TextField foodNameTextField = (TextField) hbox.getChildren().get(2);
@@ -398,17 +418,15 @@ public class DialogModifyMeals {
         TextField foodGramsTextField = (TextField) hbox.getChildren().get(5);
         foodGramsTextField.setText(Integer.toString(100));
         TextField totalKcalTextField = (TextField) hbox.getChildren().get(7);
-
         totalKcalTextField.setText(Double.toString(foodNameBeUsed.getTotKcal()));
-
         TextField grCarboTextField = (TextField) hbox.getChildren().get(9);
         grCarboTextField.setText(Integer.toString(foodNameBeUsed.getGrCarboidrati()));
         TextField grProsTextField = (TextField) hbox.getChildren().get(11);
         grProsTextField.setText(Integer.toString(foodNameBeUsed.getGrProtein()));
         TextField grGrasTextField = (TextField) hbox.getChildren().get(13);
         grGrasTextField.setText(Integer.toString(foodNameBeUsed.getGrGrassi()));
-
-
+        TextField grFibreTextField = (TextField) hbox.getChildren().get(15);
+        grFibreTextField.setText(Integer.toString(foodNameBeUsed.getGrFibre()));
     }
 
     protected String setTextValues(TextField textField, int grams, int originValue) {
@@ -436,19 +454,19 @@ public class DialogModifyMeals {
     }
 
     private void savingData(ArrayList<HBox> hBoxArrayList) {
-
-        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
-
+        String sql = "INSERT INTO MEALS (NAME_MEALS,HOUR) VALUES ('" + DialogModifyMeals.nameMealsValue + "','" + DialogModifyMeals.hourValue + "')";
+        String sqlSearch="SELECT * FROM " + MEALS + " ORDER BY " + COLUMN_ID + " DESC";
+        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statement = conn.createStatement();
-            String sql = "INSERT INTO MEALS (NAME_MEALS,HOUR) VALUES ('" + DialogModifyMeals.nameMealsValue + "','" + DialogModifyMeals.hourValue + "')";
-            statement.execute(sql);
             Statement statementSearch = conn.createStatement();
-            ResultSet results = statementSearch.executeQuery("SELECT * FROM " + MEALS + " ORDER BY " + COLUMN_ID + " DESC");
+            ) {
+            statement.execute(sql);
+
+            ResultSet results = statementSearch.executeQuery(sqlSearch);
             int idField = results.getInt(COLUMN_ID);
             results.close();
             for (HBox hboxElement : hBoxArrayList) {
                 try {
-
                     TextField txtID = (TextField) hboxElement.getChildren().get(0);
                     TextField txtGrams = (TextField) hboxElement.getChildren().get(5);
                     if(Double.parseDouble(txtGrams.getText())!=0.00){
@@ -457,50 +475,50 @@ public class DialogModifyMeals {
                     }
 
                 } catch (IndexOutOfBoundsException exception) {
-                    System.out.println(exception);
+
                 }
             }
 
         } catch (SQLException e) {
-            System.out.println(e);
+            LOG.error("Errore Database: ",e);
         }
     }
 
     private void modifyTextFields() {
         int countTextField=0;
-        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
+        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statementSearchMeal = conn.createStatement();
+        ) {
             String sqlMeal= "SELECT * FROM " + MEALS_CONFIG + " WHERE "+ COLUMN_ID_MEALS +" = "+ DialogController.mealChoose.getIdMeal() +"  ORDER BY " + COLUMN_ID + " ASC" ;
             ResultSet rsMeal= statementSearchMeal.executeQuery(sqlMeal);
 
             while (rsMeal.next())
             {
 
-                try(Connection connFood = DriverManager.getConnection(CONNECTION_STRING)) {
+                try(Connection connFood = DriverManager.getConnection(CONNECTION_STRING);
+                    Statement statementSearchFood = connFood.createStatement();) {
                     addTextFields();
-                    String sqlFood = "SELECT * FROM " + TB_ALIM + " WHERE " + COLUMN_ID_ALIM + " = " + rsMeal.getInt(COLUMN_ID_FOOD);
-                    Statement statementSearchFood = connFood.createStatement();
+                    String sqlFood = "SELECT * FROM " + ALIMENTI + " WHERE " + COLUMN_ID_ALIM + " = " + rsMeal.getInt(COLUMN_ID_FOOD);
+
                     ResultSet rsFood = statementSearchFood.executeQuery(sqlFood);
-                    //if(rsFood.next()) System.out.println(rsFood.getString(COLUMN_ID));
-                    mealsTablesController.foodchoose = new mealsTablesController.Food(rsFood.getString(COLUMN_ID_ALIM), rsFood.getString(COLUMN_ALIMENTO),
+                    MealsTablesController.foodchoose = new MealsTablesController.Food(rsFood.getString(COLUMN_ID_ALIM), rsFood.getString(COLUMN_ALIMENTO),
                     rsFood.getString(COLUMN_TOTKCAL), rsFood.getString(COLUMN_CARBOHIDRATE),
-                    rsFood.getString(COLUMN_PROTEINS), rsFood.getString(COLUMN_FAT));
-                    setFoodValues(mealsTablesController.foodchoose, hboxList.get(countTextField));
+                    rsFood.getString(COLUMN_PROTEINS), rsFood.getString(COLUMN_FAT),rsFood.getString(COLUMN_FIBER));
+                    setFoodValues(MealsTablesController.foodchoose, hboxList.get(countTextField));
 
                     HBox hboxGramsTextField = hboxList.get(countTextField);
-                    //procedo ad aggiornare il campo Grammi con quelli memorizzati
                     TextField gramsTextField = (TextField) hboxGramsTextField.getChildren().get(5);
                     TextField textField3 = (TextField) hboxGramsTextField.getChildren().get(7);
                     TextField textField4 = (TextField) hboxGramsTextField.getChildren().get(9);
                     TextField textField5 = (TextField) hboxGramsTextField.getChildren().get(11);
                     TextField textField6 = (TextField) hboxGramsTextField.getChildren().get(13);
+                    TextField textField7 = (TextField) hboxGramsTextField.getChildren().get(15);
                     gramsTextField.setText(rsMeal.getString(COLUMN_GRAMS));
-                    updateKcalories(gramsTextField, textField3, textField4, textField5, textField6,100);
+                    updateKcalories(gramsTextField, textField3, textField4, textField5, textField6, textField7,100);
                       countTextField++;
-                    statementSearchFood.close();
                     rsFood.close();
                 }catch(SQLException e){
-                    System.out.println(e);
+                    LOG.error("Errore: ",e);
                 }
                 okButton.setDisable(false);
                             }
@@ -508,15 +526,16 @@ public class DialogModifyMeals {
             rsMeal.close();
 
         } catch (SQLException e) {
-            System.out.println(e);
+            LOG.error("Errore: ",e);
         }
 
     }
 
 
     private void loadHeaders() {
-        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
-            Statement statementSearchMeal = conn.createStatement();
+        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statementSearchMeal = conn.createStatement();) {
+
             String sqlMeal= "SELECT * FROM " + MEALS + " WHERE "+ COLUMN_ID +" = "+ DialogController.mealChoose.getIdMeal();
             ResultSet rsMeal= statementSearchMeal.executeQuery(sqlMeal);
             nameMeals.setText(rsMeal.getString(COLUMN_NAME_MEALS));
@@ -527,25 +546,22 @@ public class DialogModifyMeals {
 
             rsMeal.close();
         }catch(SQLException e){
-                    System.out.println(e);
-               }
+            LOG.error("Errore: ",e);               }
     }
 
 
 
 
-    private void deleteData(ArrayList<HBox> hBoxArrayList) {
+    private void deleteData() {
 
-        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
-            Statement statement = conn.createStatement();
+        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            ) {
             String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG +"  WHERE "+ COLUMN_ID_MEALS +" = " + DialogController.mealChoose.getIdMeal();
-            statement.execute(sqlDeleteMealConfig);
-            statement.close();
-            statement = conn.createStatement();
+            conn.createStatement().execute(sqlDeleteMealConfig);
             String sqlDeleteMeal = "DELETE FROM " + MEALS +"  WHERE "+ COLUMN_ID +" = " + DialogController.mealChoose.getIdMeal();
-            statement.execute(sqlDeleteMeal);
+            conn.createStatement().execute(sqlDeleteMeal);
         } catch (SQLException e) {
-            System.out.println(e);
+            LOG.error("Errore: ",e);
         }
     }
 
@@ -554,8 +570,8 @@ public class DialogModifyMeals {
         String sql= "SELECT "+ COLUMN_NAME_MEALS+" FROM " + MEALS + " Where " + COLUMN_NAME_MEALS+" = '"+nameMeals.getText()
                 +"'";
 
-        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
-            Statement statementSearch = conn.createStatement();
+        try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+            Statement statementSearch = conn.createStatement();) {
         if(isNewMeal!=0) {
             sql += " AND " + COLUMN_ID + " != " + DialogController.mealChoose.getIdMeal();
         }
@@ -565,8 +581,8 @@ public class DialogModifyMeals {
         }
         results.close();
     }catch (SQLException e){
-        System.out.println(e);
-    }
+            LOG.error("Errore: ",e);
+        }
 
     return foundName;
     }

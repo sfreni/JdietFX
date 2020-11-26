@@ -15,8 +15,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         Parent root = FXMLLoader.load(getClass().getResource("/sample.fxml"));
-        Scene scene = new Scene(root, 400, 350);
-        primaryStage.setTitle("JDiet");
+        Scene scene = new Scene(root, 250, 200);
+        primaryStage.setTitle("JDietFX");
         JMetro jMetro = new JMetro(Style.LIGHT);
         jMetro.setScene(scene);
         primaryStage.setScene(scene);

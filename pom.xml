@@ -6,7 +6,7 @@
 
     <groupId>groupId</groupId>
     <artifactId>myJavaFx</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <build>
         <plugins>
             <plugin>
@@ -17,16 +17,69 @@
                     <target>9</target>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <itext.version>7.1.13</itext.version>
     </properties>
-
     <dependencies>
+        <!-- always needed -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- always needed -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>io</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- always needed -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for forms -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>forms</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for PDF/A -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>pdfa</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for digital signatures -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>sign</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for barcodes -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>barcodes</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for Asian fonts -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>font-asian</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+        <!-- only needed for hyphenation -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>hyph</artifactId>
+            <version>${itext.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-base</artifactId>
@@ -52,64 +105,11 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.30</version>
         </dependency>
-
-
-
-
-            <!-- always needed -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>kernel</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- always needed -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>io</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- always needed -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>layout</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for forms -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>forms</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for PDF/A -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>pdfa</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for digital signatures -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>sign</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for barcodes -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>barcodes</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for Asian fonts -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>font-asian</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
-            <!-- only needed for hyphenation -->
-            <dependency>
-                <groupId>com.itextpdf</groupId>
-                <artifactId>hyph</artifactId>
-                <version>${itext.version}</version>
-            </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.7.30</version>
+        </dependency>
     </dependencies>
 
 </project>

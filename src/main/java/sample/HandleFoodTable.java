@@ -5,29 +5,32 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class HandleFoodTable {
 
     public static final String DB_NAME = "data.sqlite";
     public static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
-    public static final String TABLE_ALIMENTI = "tb_alim";
+    public static final String ALIMENTI = "ALIMENTI";
     public static final String COLUMN_ID = "id_Alim";
     public static final String COLUMN_ALIMENTO = "ALIMENTO";
     public static final String COLUMN_TOTKCAL = "KC";
@@ -35,9 +38,9 @@ public class HandleFoodTable {
     public static final String COLUMN_PROTEINS = "PRO";
     public static final String COLUMN_FAT = "GRA";
     public static final String COLUMN_FIBER = "FIB";
+    private static final Logger LOG = LoggerFactory.getLogger(HandleFoodTable.class);
 
-    public static Food foodchoose; //E' un oggetto transitorio che consente di trasferire l'oggetto nell'altra mascherina
-    // public static int cancelPressed;
+    public static Food foodchoose;
     @FXML
     private TableView<Food> tbDietItems;
 
@@ -79,7 +82,7 @@ public class HandleFoodTable {
 
 
     @FXML
-    protected Button     sampleButton;
+    protected Button sampleButton;
 
 
     @FXML
@@ -88,7 +91,6 @@ public class HandleFoodTable {
     @FXML
 
     public void initialize() {
-      //  anchorPane.getStyleClass().add(JMetroStyleClass.BACKGROUND);
 
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         unitFood.setCellValueFactory(new PropertyValueFactory<>("unitFood"));
@@ -119,11 +121,10 @@ public class HandleFoodTable {
                                 ControlHandleFoodDetail.isNewFood = false;
                                 ControlHandleFoodDetail.deleteData();
                             } catch (Exception ex) {
-                                System.out.println("Couldn't load the dialog");
+                                LOG.error("Couldn't load the dialog");
                                 ex.printStackTrace();
                             }
                         }
-                        //    loadValues();
 
                     } else {
                         Alert a = new Alert(Alert.AlertType.NONE);
@@ -139,47 +140,16 @@ public class HandleFoodTable {
         cancelButton.setOnAction(e -> {
             Stage stage = (Stage) tbDietItems.getScene().getWindow();
             stage.close();
-            stage=null;
+            stage = null;
         });
-        sampleButton.setOnAction(e -> {
-            try {
-                ControlHandleFoodDetail.isNewFood = true;
-                Stage newStage = new Stage();
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/prova.fxml"));
-                Parent root = loader.load();
-                Scene scene = new Scene(root, 410, 310);
-
-                newStage.initModality(Modality.APPLICATION_MODAL);
-                JMetro jMetro = new JMetro(Style.LIGHT);
-
-
-                jMetro.setScene(scene);
-                newStage.setTitle("Aggiungi Alimento");
-                newStage.setScene(scene);
-                newStage.showAndWait();
-            }catch (IOException exc) {
-                System.out.println("Couldn't load the dialog");
-                exc.printStackTrace();
-            }
-        });
-
-
-
-
     }
 
     private void loadTableItems() {
         ObservableList<Food> observableArrayList;
-        //  observableArrayList=null;
         observableArrayList = FXCollections.observableArrayList();
-
-        try {
-            Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-            Statement statement = conn.createStatement();
-
-            ResultSet results = statement.executeQuery("SELECT * FROM " + TABLE_ALIMENTI + " ORDER BY " + COLUMN_ALIMENTO + " COLLATE NOCASE ASC ");
-
-//            observableArrayList = tbDietItems.getItems();
+        String sql = "SELECT * FROM " + ALIMENTI + " ORDER BY " + COLUMN_ALIMENTO + " COLLATE NOCASE ASC ";
+        try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+             ResultSet results = conn.createStatement().executeQuery(sql);) {
 
             while (results.next()) {
 
@@ -188,30 +158,19 @@ public class HandleFoodTable {
 
             }
             tbDietItems.setItems(observableArrayList);
-            results.close();
-            conn.close();
 
-            tbDietItems.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent click) {
-                    if (click.getClickCount() >= 1) {
-                        if (click.getClickCount() >= 2) {
-                            modifyFood(new ActionEvent());
-                        }
+            tbDietItems.setOnMouseClicked(click -> {
 
-                    }
+                if (click.getClickCount() >= 2) {
+                    modifyFood(new ActionEvent());
                 }
+
             });
 
 
-            results.close();
-
-            statement.close();
-            conn.close();
-
         } catch (
                 SQLException e) {
-            System.out.println("Something went wrong: " + e.getMessage());
+            LOG.error("Something went wrong: " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -219,27 +178,20 @@ public class HandleFoodTable {
 
         filterField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredData.setPredicate(food -> {
-                // If filter text is empty, display all persons.
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
 
-                // Compare first name and last name of every person with filter text.
+
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (food.getUnitFood().toLowerCase().indexOf(lowerCaseFilter) != -1) {
-                    return true; // Filter matches first name.
-                }
-
-                return false; // Does not match.
+                return food.getUnitFood().toLowerCase().indexOf(lowerCaseFilter) != -1;
             });
         });
 
-        // 3. Wrap the FilteredList in a SortedList.
+
         SortedList<Food> sortedData = new SortedList<>(filteredData);
 
-        // 4. Bind the SortedList comparator to the TableView comparator.
-        // 	  Otherwise, sorting the TableView would have no effect.
         sortedData.comparatorProperty().bind(tbDietItems.comparatorProperty());
 
         // 5. Add sorted (and filtered) data to the table.
@@ -265,7 +217,7 @@ public class HandleFoodTable {
             newStage.showAndWait();
 
         } catch (IOException e) {
-            System.out.println("Couldn't load the dialog");
+            LOG.error("Couldn't load the dialog");
             e.printStackTrace();
 
         }
@@ -294,11 +246,10 @@ public class HandleFoodTable {
                 newStage.setScene(scene);
                 newStage.showAndWait();
             } catch (IOException e) {
-                System.out.println("Couldn't load the dialog");
+                LOG.error("Couldn't load the dialog");
                 e.printStackTrace();
             }
 
-            //    loadValues();
             TableView.TableViewSelectionModel selectionModel = tbDietItems.getSelectionModel();
             selectionModel.select(row);
 
@@ -306,7 +257,6 @@ public class HandleFoodTable {
             Alert a = new Alert(Alert.AlertType.NONE);
             a.setAlertType(Alert.AlertType.ERROR);
             a.setContentText("Si prega di selezionare l'elemento desiderato prima di cliccare il pulsante Modifica");
-            // show the dialog
             a.show();
 
         }

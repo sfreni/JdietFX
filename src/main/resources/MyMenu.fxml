@@ -5,6 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <BorderPane fx:id="mainBorderPane" fx:controller="sample.MenuController"
             xmlns:fx="http://javafx.com/fxml">
@@ -23,25 +24,32 @@
                     </items>
                 </Menu>
                 <Menu id="settingsMenu" fx:id="settingsMenu" mnemonicParsing="false" text="Impostazioni">
+                    <items>
+                        <MenuItem id="SettingsItem" fx:id="Settings" text="Dati Utente" onAction="#handleSettings"/>
+                    </items>
                 </Menu>
                 <Menu id="helpMenu" fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem id="visitMe" fx:id="visitMe" text="Visita il mio sito" onAction="#handleWebsite"/>
+                        <MenuItem id="emailMe" fx:id="emailMe" text="Scrivi a stefano@freni.it" onAction="#handleEmail"/>
+                    </items>
+
                 </Menu>
             </menus>
         </MenuBar>
     </top>
-
-
     <center>
-
-        <HBox>
-            <Label text="JCalculateCal">
+        <VBox spacing="10">
+        <HBox alignment="CENTER" >
+            <Label text="JDietFX">
                 <font>
                     <Font name="Times New Roman bold" size="40"/>
                 </font>
             </Label>
+        </HBox>
 
-
-            <ImageView fitHeight="150.0" fitWidth="200.0"
+            <HBox alignment="CENTER">
+            <ImageView fitHeight="300.0" fitWidth="400.0"
                        layoutX="69.0" layoutY="322.0"
 
                        preserveRatio="true">
@@ -51,16 +59,9 @@
             </ImageView>
         </HBox>
 
-    </center>
+        </VBox>
 
-    <!--        <GridPane vgap="10" hgap="10">-->
-    <!--            <Label text="Short Description:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>-->
-    <!--            <TextField GridPane.rowIndex="0" GridPane.columnIndex="1"/>-->
-    <!--            <Label text="Details:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>-->
-    <!--            <TextArea GridPane.rowIndex="1" GridPane.columnIndex="1"/>-->
-    <!--            <Label text="Deadline:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>-->
-    <!--            <DatePicker GridPane.rowIndex="2" GridPane.columnIndex="1"/>-->
-    <!--        </GridPane>-->
+</center>
 
 
 </BorderPane>

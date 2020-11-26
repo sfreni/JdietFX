@@ -3,7 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="sample.mealsTablesController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="sample.MealsTablesController">
 
     <VBox spacing="10">
         <HBox id="HBox" />
@@ -12,13 +12,13 @@
     <VBox spacing="10" />
 
 
-    <VBox layoutX="770.0" layoutY="585.0" spacing="10">
+    <VBox layoutX="920.0" layoutY="585.0" spacing="10">
         <HBox alignment="BOTTOM_RIGHT" spacing="10">
             <Button fx:id="okButton" prefHeight="25.0" prefWidth="60.0" text="OK" />
             <Button fx:id="cancelButton" prefHeight="25.0" prefWidth="60.0" text="Chiudi" />
         </HBox>
     </VBox>
-    <TableView fx:id="tbDietItems" layoutX="33.0" layoutY="54.0" prefHeight="518.0" prefWidth="870">
+    <TableView fx:id="tbDietItems" layoutX="33.0" layoutY="54.0" prefHeight="518.0" prefWidth="1020">
         <columns>
             <TableColumn fx:id="id" text="ID" visible="false">
             </TableColumn>
@@ -31,6 +31,8 @@
             <TableColumn fx:id="grProtein" text="Gr. Proteine" prefWidth="150">
             </TableColumn>
             <TableColumn fx:id="grGrassi" text="Gr. Grassi" prefWidth="150">
+            </TableColumn>
+            <TableColumn fx:id="grFibre" text="Gr. Fibre" prefWidth="150">
             </TableColumn>
         </columns>
 

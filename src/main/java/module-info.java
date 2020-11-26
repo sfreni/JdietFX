@@ -5,6 +5,11 @@ module myJavaFx {
     requires java.sql;
 //    requires slf4j.api;
    requires org.jfxtras.styles.jmetro;
+    requires kernel;
+    requires io;
+    requires layout;
+    requires java.desktop;
+    requires org.slf4j;
     opens sample;
 
 }
