@@ -90,53 +90,68 @@ public class DialogModifyMeals {
     public void initialize() {
         hboxList = new ArrayList<>();
         countButton = 0;
-        if (isNewMeal) {
-            addTextFields();
-        } else {
-            modifyTextFields();
-            deleteButton.setVisible(true);
-        }
-
+        checkIsNewMeal();
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        try {
-            hour.setTextFormatter(new TextFormatter<>(new DateTimeStringConverter(format), format.parse("12:00")));
-            hourValue = hour.getText();
-
-        } catch (ParseException parsexception) {
-            LOG.error(STRING_ERROR, parsexception);
-
-
-        }
+        formatTextField(format);
         nameMeals.setPromptText("Inserire il nome del pasto");
-
         nameMeals.focusedProperty().addListener((obs, oldVal, inFocus) -> {
             if (!inFocus) {
+                nameMeals.setText(nameMeals.getText().toUpperCase());
                 nameMealsValue = nameMeals.getText();
-                nameMeals.setText(nameMealsValue.toUpperCase());
-                nameMealsValue = nameMeals.getText();
-
             }
-
         });
 
         hour.focusedProperty().addListener((obs, oldVal, inFocus) -> {
-            if (!inFocus) {
-
-                hourValue = hour.getText();
-
-            }
-
+            if (!inFocus) hourValue = hour.getText();
         });
 
         totKcalOverall.setText("0");
 
+        handleOkButton();
 
+        handleDeleteButton();
+
+        cancelButton.setOnAction(e -> {
+            Stage stage = (Stage) borderPane.getScene().getWindow();
+            stage.close();
+            stage = null;
+
+        });
+
+        if (!isNewMeal) {
+            calculateTotKcal(hboxList);
+            loadHeaders();
+        }
+
+    }
+
+    private void handleDeleteButton() {
+        deleteButton.setOnAction(e -> {
+                    Alert alert = deleteAlert();
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == ButtonType.OK) {
+
+                        deleteData();
+                        hboxList = new ArrayList<>();
+                        countButton = 0;
+
+                        Stage stage = (Stage) borderPane.getScene().getWindow();
+                        stage.close();
+                        stage = null;
+                    }
+                }
+        );
+    }
+
+    private void handleOkButton() {
         okButton.setOnAction(e -> {
 
             if (hourValue.equals("") || nameMealsValue.equals("")) {
                 dialogError("L'ORARIO ED IL NOME DEL PASTO DEVE ESSERE COMPILATO!");
-            } else {
-                if (!verifyNameMeal()) {
+                return;
+            }
+
+            if (!verifyNameMeal()) {
                     if (!isNewMeal) {
                         deleteData();
                     }
@@ -149,41 +164,25 @@ public class DialogModifyMeals {
                 } else {
                     dialogError("NOME PASTO GIA' ESISTENTE, CAMBIARE IL NOME!");
                 }
-            }
         });
+    }
 
-
-        deleteButton.setOnAction(e -> {
-                    Alert alert = deleteAlert();
-                    Optional<ButtonType> result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == ButtonType.OK) {
-
-
-                        deleteData();
-                        hboxList = new ArrayList<>();
-                        countButton = 0;
-
-                        Stage stage = (Stage) borderPane.getScene().getWindow();
-                        stage.close();
-                        stage = null;
-                    }
-                }
-        );
-
-
-        cancelButton.setOnAction(e -> {
-            Stage stage = (Stage) borderPane.getScene().getWindow();
-            stage.close();
-            stage = null;
-
-        });
-
-
-        if (!isNewMeal) {
-            calculateTotKcal(hboxList);
-            loadHeaders();
+    private void formatTextField(SimpleDateFormat format) {
+        try {
+            hour.setTextFormatter(new TextFormatter<>(new DateTimeStringConverter(format), format.parse("12:00")));
+            hourValue = hour.getText();
+        } catch (ParseException parsexception) {
+            LOG.error(STRING_ERROR, parsexception);
         }
+    }
 
+    private void checkIsNewMeal() {
+        if (isNewMeal) {
+            addTextFields();
+        } else {
+            modifyTextFields();
+            deleteButton.setVisible(true);
+        }
     }
 
     private Alert deleteAlert() {
