@@ -82,7 +82,7 @@ public class DialogController {
     @FXML
     protected void newMeals() {
         try {
-            DialogModifyMeals.setIsNewMeal(0);
+            DialogModifyMeals.setIsNewMeal(true);
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
@@ -116,7 +116,7 @@ public class DialogController {
             int row = pos.getRow();
             setMealChoose(tbMealsItems.getItems().get(row));
         try {
-            DialogModifyMeals.setIsNewMeal(1);
+            DialogModifyMeals.setIsNewMeal(false);
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();

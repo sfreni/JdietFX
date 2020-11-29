@@ -26,7 +26,12 @@ public class MealsTablesController {
     public static final String COLUMN_FAT = "GRA";
     public static final String COLUMN_FIBER = "FIB";
     private static final Logger LOG = LoggerFactory.getLogger(MealsTablesController.class);
-    public static Food foodchoose;
+
+
+
+    private static Food foodchoose;
+
+
     @FXML
     private TableView<Food> tbDietItems;
 
@@ -61,8 +66,15 @@ public class MealsTablesController {
     @FXML
     private TextField filterField;
 
-    @FXML
+    public static Food getFoodchoose() {
+        return foodchoose;
+    }
 
+    public static void setFoodchoose(Food foodchoose) {
+        MealsTablesController.foodchoose = foodchoose;
+    }
+
+    @FXML
     public void initialize() {
 
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -155,6 +167,8 @@ public class MealsTablesController {
             stage.close();
 
         });
+
+
 
     }
 
