@@ -2,7 +2,6 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -36,7 +35,9 @@ public class DialogController {
     public static final String MEALS_CONFIG = "MEALS_CONFIG";
     public static final String COLUMN_ID_MEALS = "ID_MEALS";
     private static final Logger LOG = LoggerFactory.getLogger(DialogController.class);
-    public static Meal mealChoose; //E' un oggetto transitorio che consente di gestire la modifica nel DialogModifyMeals
+    private static Meal mealChoose; //E' un oggetto transitorio che consente di gestire la modifica nel DialogModifyMeals
+
+
 
     @FXML
     protected TableView<Meal> tbMealsItems;
@@ -79,9 +80,9 @@ public class DialogController {
     }
 
     @FXML
-    protected void newMeals(ActionEvent event) {
+    protected void newMeals() {
         try {
-            DialogModifyMeals.isNewMeal=0;
+            DialogModifyMeals.setIsNewMeal(0);
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
@@ -100,7 +101,7 @@ public class DialogController {
         }
 
         loadValues();
-        TableView.TableViewSelectionModel selectionModel = tbMealsItems.getSelectionModel();
+        TableView.TableViewSelectionModel<Meal> selectionModel = tbMealsItems.getSelectionModel();
         selectionModel.select(0);
 
 
@@ -108,14 +109,14 @@ public class DialogController {
     }
 
     @FXML
-    protected void modifyMeals(ActionEvent event) {
+    protected void modifyMeals() {
         boolean isEmptySelection = tbMealsItems.getSelectionModel().getSelectedCells().isEmpty();
         if(!isEmptySelection) {
             TablePosition pos = tbMealsItems.getSelectionModel().getSelectedCells().get(0);
             int row = pos.getRow();
-            mealChoose = tbMealsItems.getItems().get(row);
+            setMealChoose(tbMealsItems.getItems().get(row));
         try {
-            DialogModifyMeals.isNewMeal=1;
+            DialogModifyMeals.setIsNewMeal(1);
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/modifyMeals.fxml"));
             Parent root = loader.load();
@@ -133,7 +134,7 @@ public class DialogController {
         }
 
         loadValues();
-            TableView.TableViewSelectionModel selectionModel = tbMealsItems.getSelectionModel();
+            TableView.TableViewSelectionModel<Meal> selectionModel = tbMealsItems.getSelectionModel();
             selectionModel.select(row);
 
         }else{
@@ -149,7 +150,7 @@ public class DialogController {
     }
 
         @FXML
-    protected void closeThisScreen(ActionEvent event) {
+    protected void closeThisScreen() {
         Stage stage = (Stage) tbMealsItems.getScene().getWindow();
         stage.close();
 
@@ -163,7 +164,7 @@ public class DialogController {
                 "INNER JOIN ALIMENTI ON MEALS_CONFIG.ID_FOOD = ALIMENTI.ID_Alim GROUP BY MEALS.ID, MEALS.NAME_MEALS, MEALS.HOUR ORDER BY MEALS.HOUR";
 
 try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-                ResultSet results = conn.createStatement().executeQuery(sql);) {
+                ResultSet results = conn.createStatement().executeQuery(sql)) {
             ObservableList<Meal> observableArrayList= FXCollections.observableArrayList();
 
             while (results.next()) {
@@ -182,7 +183,7 @@ try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             tbMealsItems.setOnMouseClicked(click -> {
 
                     if (click.getClickCount() >= 2) {
-                        modifyMeals(new ActionEvent());
+                        modifyMeals();
                     }
 
 
@@ -199,7 +200,7 @@ try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
 
 
     @FXML
-    protected void deleteMeals(ActionEvent event) {
+    protected void deleteMeals() {
         boolean isEmptySelection = tbMealsItems.getSelectionModel().getSelectedCells().isEmpty();
         if(!isEmptySelection) {
 
@@ -213,20 +214,14 @@ try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Optional<ButtonType> result = alert.showAndWait();
             if(result.isPresent() && result.get() == ButtonType.OK) {
 
-
-
-            ///
             TablePosition pos = tbMealsItems.getSelectionModel().getSelectedCells().get(0);
             int row = pos.getRow();
-            mealChoose = tbMealsItems.getItems().get(row);
-
+            setMealChoose(tbMealsItems.getItems().get(row));
                 String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG +"  WHERE "+ COLUMN_ID_MEALS +" = " + DialogController.mealChoose.getIdMeal();
                 String sqlDeleteMeal = "DELETE FROM " + TABLE_MEALS +"  WHERE "+ COLUMN_ID +" = " + DialogController.mealChoose.getIdMeal();
             try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
                 Statement statementConfig = conn.createStatement();
-                Statement statementMeal = conn.createStatement();
-                ) {
-
+                Statement statementMeal = conn.createStatement()) {
                 statementConfig.execute(sqlDeleteMealConfig);
                 statementMeal.execute(sqlDeleteMeal);
             } catch (SQLException e) {
@@ -234,7 +229,7 @@ try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             }
 
             loadValues();
-            TableView.TableViewSelectionModel selectionModel = tbMealsItems.getSelectionModel();
+            TableView.TableViewSelectionModel<Meal> selectionModel = tbMealsItems.getSelectionModel();
             selectionModel.select(row);
             }
         }else{
@@ -249,63 +244,13 @@ try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
 
 
     }
-
-
-
-
-
-
-    public class Meal{
-        private String idMeal;
-        private String nameMeal;
-        private String hourMeal;
-        private String totKCal;
-        private String grCarbo;
-        private String grPro;
-        private String grFat;
-        private String grFib;
-
-        public Meal(String idMeal, String nameMeal, String hourMeal, String totKCal, String grCarbo, String grPro, String grFat,String grFib) {
-            this.idMeal = idMeal;
-            this.nameMeal = nameMeal;
-            this.hourMeal = hourMeal;
-            this.totKCal = totKCal;
-            this.grCarbo =grCarbo;
-            this.grPro = grPro;
-            this.grFat = grFat;
-            this.grFib = grFib;
-        }
-
-        public String getIdMeal() {
-            return idMeal;
-        }
-
-        public String getNameMeal() {
-            return nameMeal;
-        }
-
-        public String getHourMeal() {
-            return hourMeal;
-        }
-
-        public String getTotKCal() {
-            return totKCal;
-        }
-
-        public String getGrCarbo() {
-            return grCarbo;
-        }
-
-        public String getGrPro() {
-            return grPro;
-        }
-
-        public String getGrFat() {
-            return grFat;
-        }
-        public String getGrFib() {
-            return grFib;
-        }
+    public static Meal getMealChoose() {
+        return mealChoose;
     }
+
+    public static void setMealChoose(Meal mealChoose) {
+        DialogController.mealChoose = mealChoose;
+    }
+
 
 }

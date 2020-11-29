@@ -29,29 +29,26 @@ public class ControllerUserData {
     PreparedStatement query;
 
 
-    @FXML
-    public Button cancelButton;
+    @FXML private Button cancelButton;
 
-    @FXML
-    public Button okButton;
+    @FXML private Button okButton;
 
 
-    @FXML
-    public TextField nome;
-    public TextField cognome;
-    public TextField altezza;
-    public TextField peso;
-    public TextField userLogin;
-    public TextField password;
+    @FXML private TextField nome;
+    @FXML private TextField cognome;
+    @FXML private TextField altezza;
+    @FXML private TextField peso;
+    @FXML private TextField userLogin;
+    @FXML private TextField password;
 
-    @FXML
-    public CheckBox altezzaPrint;
-    public CheckBox pesoPrint;
+
+    @FXML private CheckBox altezzaPrint;
+    @FXML private CheckBox pesoPrint;
 
     public void initialize() {
         String sql = "SELECT * FROM " + USER;
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             ResultSet results = conn.createStatement().executeQuery(sql);) {
+             ResultSet results = conn.createStatement().executeQuery(sql)) {
 
 
             if (results.next()) {
@@ -71,36 +68,25 @@ public class ControllerUserData {
 
             }
         } catch (SQLException e) {
-            LOG.info("" + e);
+            LOG.info("" , e);
         }
 
 
 
-        altezza.focusedProperty().addListener((obs, oldVal, inFocus) -> {
-            verifyAndCalcucaleTotalKcal(inFocus,altezza);
-
-        });
-
-        peso.focusedProperty().addListener((obs, oldVal, inFocus) -> {
-            verifyAndCalcucaleTotalKcal(inFocus,peso);
-
-        });
-
-
-
-
+        altezza.focusedProperty().addListener((obs, oldVal, inFocus) -> verifyAndCalcucaleTotalKcal(inFocus,altezza));
+        peso.focusedProperty().addListener((obs, oldVal, inFocus) -> verifyAndCalcucaleTotalKcal(inFocus,peso));
 
 
         okButton.setOnAction(e -> {
 
 
 
-            try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-            ) {
+            try (Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
+                final String parameter = " = ?, ";
                 query = conn.prepareStatement(
-                        "UPDATE " + USER + " SET " + COLUMN_NOME + " = ?, " + COLUMN_COGNOME + " = ? " +
-                                ", " + COLUMN_ALTEZZA + " = ?, " + COLUMN_PESO + " = ?, " + COLUMN_ALTEZZA_PRINT + " = ?, " + COLUMN_PESO_PRINT + " = ?, "
-                         + COLUMN_USER + " = ?, " + COLUMN_PASSWORD + " = ? " );
+                        "UPDATE " + USER + " SET " + COLUMN_NOME + parameter + COLUMN_COGNOME + " = ? " +
+                                ", " + COLUMN_ALTEZZA + parameter + COLUMN_PESO + parameter + COLUMN_ALTEZZA_PRINT + parameter + COLUMN_PESO_PRINT + parameter
+                         + COLUMN_USER + parameter + COLUMN_PASSWORD + " = ? " );
 
                 query.setString(1, nome.getText());
                 query.setString(2, cognome.getText());
@@ -127,24 +113,21 @@ public class ControllerUserData {
 
                 query.executeUpdate();
             } catch (SQLException ex) {
-                LOG.info("" + ex);
+                LOG.info("" , ex);
             }finally {
                 closeThisWindow();
             }
         });
 
-        cancelButton.setOnAction(e -> {
-            closeThisWindow();
-        });
+        cancelButton.setOnAction(e -> closeThisWindow());
     }
 
     private void closeThisWindow() {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-        stage = null;
     }
 
-    private void verifyAndCalcucaleTotalKcal(Boolean inFocus,TextField textField) {
+    private void verifyAndCalcucaleTotalKcal(boolean inFocus,TextField textField) {
         if (!inFocus && !textField.getText().equals("") ) {
 
             try {

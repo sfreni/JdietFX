@@ -117,8 +117,8 @@ public class HandleFoodTable {
                             TablePosition pos = tbDietItems.getSelectionModel().getSelectedCells().get(0);
                             int row = pos.getRow();
                             try {
-                                ControlHandleFoodDetail.rowModifyRecord = tbDietItems.getItems().get(row).getId();
-                                ControlHandleFoodDetail.isNewFood = false;
+                                ControlHandleFoodDetail.setRowModifyRecord(tbDietItems.getItems().get(row).getId());
+                                ControlHandleFoodDetail.setIsNewFood(false);
                                 ControlHandleFoodDetail.deleteData();
                             } catch (Exception ex) {
                                 LOG.error("Couldn't load the dialog");
@@ -201,7 +201,7 @@ public class HandleFoodTable {
     @FXML
     protected void newFood(ActionEvent event) {
         try {
-            ControlHandleFoodDetail.isNewFood = true;
+            ControlHandleFoodDetail.setIsNewFood(true);
             Stage newStage = new Stage();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/HandleFoodDetail.fxml"));
             Parent root = loader.load();
@@ -233,8 +233,8 @@ public class HandleFoodTable {
             TablePosition pos = tbDietItems.getSelectionModel().getSelectedCells().get(0);
             int row = pos.getRow();
             try {
-                ControlHandleFoodDetail.rowModifyRecord = tbDietItems.getItems().get(row).getId();
-                ControlHandleFoodDetail.isNewFood = false;
+                ControlHandleFoodDetail.setRowModifyRecord(tbDietItems.getItems().get(row).getId());
+                ControlHandleFoodDetail.setIsNewFood(false);
                 Stage newStage = new Stage();
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/HandleFoodDetail.fxml"));
                 Parent root = loader.load();

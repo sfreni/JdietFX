@@ -47,7 +47,10 @@ public class DialogModifyMeals {
     public static final String COLUMN_FIBER = "FIB";
     static ArrayList<HBox> hboxList = new ArrayList<>();
     static int countButton; //Conta il numero delle righe ogni volta che viene cliccato (+)
-    static int isNewMeal=0; //Conta il numero delle righe ogni volta che viene cliccato (+)
+
+
+
+    private static int isNewMeal=0; //Conta il numero delle righe ogni volta che viene cliccato (+)
     private int pressButton;
     private int textValueFocusIn;
     private static final Logger LOG = LoggerFactory.getLogger(DialogModifyMeals.class);
@@ -489,7 +492,7 @@ public class DialogModifyMeals {
         try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statementSearchMeal = conn.createStatement();
         ) {
-            String sqlMeal= "SELECT * FROM " + MEALS_CONFIG + " WHERE "+ COLUMN_ID_MEALS +" = "+ DialogController.mealChoose.getIdMeal() +"  ORDER BY " + COLUMN_ID + " ASC" ;
+            String sqlMeal= "SELECT * FROM " + MEALS_CONFIG + " WHERE "+ COLUMN_ID_MEALS +" = "+ DialogController.getMealChoose().getIdMeal() +"  ORDER BY " + COLUMN_ID + " ASC" ;
             ResultSet rsMeal= statementSearchMeal.executeQuery(sqlMeal);
 
             while (rsMeal.next())
@@ -536,7 +539,7 @@ public class DialogModifyMeals {
         try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statementSearchMeal = conn.createStatement();) {
 
-            String sqlMeal= "SELECT * FROM " + MEALS + " WHERE "+ COLUMN_ID +" = "+ DialogController.mealChoose.getIdMeal();
+            String sqlMeal= "SELECT * FROM " + MEALS + " WHERE "+ COLUMN_ID +" = "+ DialogController.getMealChoose().getIdMeal();
             ResultSet rsMeal= statementSearchMeal.executeQuery(sqlMeal);
             nameMeals.setText(rsMeal.getString(COLUMN_NAME_MEALS));
             nameMealsValue=rsMeal.getString(COLUMN_NAME_MEALS);
@@ -556,9 +559,9 @@ public class DialogModifyMeals {
 
         try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             ) {
-            String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG +"  WHERE "+ COLUMN_ID_MEALS +" = " + DialogController.mealChoose.getIdMeal();
+            String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG +"  WHERE "+ COLUMN_ID_MEALS +" = " + DialogController.getMealChoose().getIdMeal();
             conn.createStatement().execute(sqlDeleteMealConfig);
-            String sqlDeleteMeal = "DELETE FROM " + MEALS +"  WHERE "+ COLUMN_ID +" = " + DialogController.mealChoose.getIdMeal();
+            String sqlDeleteMeal = "DELETE FROM " + MEALS +"  WHERE "+ COLUMN_ID +" = " +DialogController.getMealChoose().getIdMeal();
             conn.createStatement().execute(sqlDeleteMeal);
         } catch (SQLException e) {
             LOG.error("Errore: ",e);
@@ -573,7 +576,7 @@ public class DialogModifyMeals {
         try(Connection conn = DriverManager.getConnection(CONNECTION_STRING);
             Statement statementSearch = conn.createStatement();) {
         if(isNewMeal!=0) {
-            sql += " AND " + COLUMN_ID + " != " + DialogController.mealChoose.getIdMeal();
+            sql += " AND " + COLUMN_ID + " != " + DialogController.getMealChoose().getIdMeal();
         }
         ResultSet results = statementSearch.executeQuery(sql);
         if(results.next()) {
@@ -585,6 +588,13 @@ public class DialogModifyMeals {
         }
 
     return foundName;
+    }
+    public static int getIsNewMeal() {
+        return isNewMeal;
+    }
+
+    public static void setIsNewMeal(int isNewMeal) {
+        DialogModifyMeals.isNewMeal = isNewMeal;
     }
 
 }

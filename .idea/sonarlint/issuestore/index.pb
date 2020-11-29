@@ -22,8 +22,6 @@ $src/main/java/sample/Controller.java,1\f\1f7112117d06b668d0b7393b88083c71cbb03
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 B
 css/stylesheet.css,7\b\7b78018f6d5442993800eefae8ea7d72652f47b7
-W
-'src/main/java/sample/css/stylesheet.css,6\a\6a7fadb4393b79ce6c2720a7f3fc701dbe26bc27
 _
 /src/main/java/sample/mealsTablesController.java,e\0\e0242dde05a46942d1d7418536c9f3917bad9a50
 Y
@@ -34,7 +32,5 @@ T
 $src/main/java/sample/PrintMeals.java,8\f\8f98d7c665370b1855e863b083f99583baf60c18
 \
 ,src/main/java/sample/ControllerUserData.java,a\7\a753af487c8dec1bb701403a6a23162e3244390e
-X
-(src/test/java/sample/PrintMealsTest.java,7\c\7c468934fa9ab8de3d7fa9b03cc1198ecbcb503a
 _
 /src/main/java/sample/MealsTablesController.java,a\e\aeb81eb71e0d9288531572c3b4214a21ee4a0c8d

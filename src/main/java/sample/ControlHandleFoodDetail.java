@@ -6,13 +6,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class ControlHandleFoodDetail {
@@ -28,9 +26,8 @@ public class ControlHandleFoodDetail {
     public static final String COLUMN_PROTEINS = "PRO";
     public static final String COLUMN_FAT = "GRA";
     public static final String COLUMN_ID_FOOD = "ID_FOOD";
-    public static ArrayList<HBox> hboxList = new ArrayList<>();
-    public static boolean isNewFood;
-    public static int rowModifyRecord;
+    private static boolean isNewFood;
+    private static int rowModifyRecord;
     int textValueFocusIn;
     PreparedStatement query;
     private static final Logger LOG = LoggerFactory.getLogger(ControlHandleFoodDetail.class);
@@ -68,9 +65,9 @@ public class ControlHandleFoodDetail {
     public Button deleteButton;
 
 
+
     @FXML
     public void initialize() {
-        hboxList = new ArrayList<>();
         nameFood.setPromptText("Inserire il nome dell' alimento");
         nameFood.focusedProperty().addListener((obs, oldVal, inFocus) -> {
             if (!inFocus && !nameFood.getText().equals("")) {
@@ -139,7 +136,9 @@ public class ControlHandleFoodDetail {
         totKcal.setStyle("-fx-text-fill: #000000;-fx-background-color: #FFFFFF; ");
     }
 
-    private void verifyAndCalcucaleTotalKcal(Boolean inFocus, TextField textField) {
+
+
+    private void verifyAndCalcucaleTotalKcal(boolean inFocus, TextField textField) {
         if (!inFocus && !textField.getText().equals("")) {
 
             try {
@@ -175,11 +174,10 @@ public class ControlHandleFoodDetail {
                         + protFood.getText() + " , " + carboFood.getText() + ", " + fatFood.getText() + ", " + fiberFood.getText() + "," + totkcal + ")";
                 statement.execute(sql);
             } catch (SQLException e) {
-                LOG.error("" + e);
+                LOG.error("", e);
             }
         } else {
-            try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-            ) {
+            try (Connection conn = DriverManager.getConnection(CONNECTION_STRING)) {
                 int totkcal = Integer.parseInt(protFood.getText()) * 4 + Integer.parseInt(carboFood.getText()) * 4 + Integer.parseInt(fatFood.getText()) * 9;
                 query = conn.prepareStatement(
                         "UPDATE " + ALIMENTI + " SET ALIMENTO = ?, PRO = ? , CAR = ?, GRA = ?, FIB = ?, KC = ? "
@@ -193,19 +191,19 @@ public class ControlHandleFoodDetail {
                 query.setInt(7, rowModifyRecord);
                 query.executeUpdate();
             } catch (SQLException e) {
-                LOG.error(e + "e");
+                LOG.error("e", e);
             }
         }
     }
 
 
     public static void deleteData() {
+        boolean isNotFound=false;
         String sqlSelectFood = "SELECT * FROM " + MEALS_CONFIG + "  WHERE " + COLUMN_ID_FOOD + " = " + rowModifyRecord;
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             ResultSet results = conn.createStatement().executeQuery(sqlSelectFood);) {
+             ResultSet results = conn.createStatement().executeQuery(sqlSelectFood)) {
             if (!results.next()) {
-                String sqlDeleteFood = "DELETE FROM " + ALIMENTI + "  WHERE " + COLUMN_ID_ALIM + " = " + rowModifyRecord;
-                conn.createStatement().execute(sqlDeleteFood);
+                isNotFound=true;
             } else {
                 Alert a = new Alert(Alert.AlertType.NONE);
                 a.setAlertType(Alert.AlertType.ERROR);
@@ -214,7 +212,17 @@ public class ControlHandleFoodDetail {
                 a.show();
             }
         } catch (SQLException e) {
-            LOG.error(e + "");
+            LOG.error("",e);
+        }
+
+        if(isNotFound) {
+            try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
+                Statement statement = conn.createStatement()) {
+                String sqlDeleteFood = "DELETE FROM " + ALIMENTI + "  WHERE " + COLUMN_ID_ALIM + " = " + rowModifyRecord;
+                statement.execute(sqlDeleteFood);
+            } catch (SQLException e) {
+                LOG.error("", e);
+            }
         }
 
 
@@ -222,7 +230,8 @@ public class ControlHandleFoodDetail {
 
     private void loadValues() {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             ResultSet results = conn.createStatement().executeQuery("SELECT * from " + ALIMENTI + " where " + COLUMN_ID_ALIM + " = " + rowModifyRecord);) {
+             ResultSet results = conn.createStatement().executeQuery("SELECT * from " + ALIMENTI + " where " + COLUMN_ID_ALIM +
+                                                                         " = " + rowModifyRecord)) {
             if (results.next()) {
                 nameFood.setText(results.getString(COLUMN_NAME_FOOD));
                 carboFood.setText(results.getString(COLUMN_CARBOHIDRATE));
@@ -232,10 +241,17 @@ public class ControlHandleFoodDetail {
                 totKcal.setText(results.getString(COLUMN_TOTKCAL));
             }
         } catch (SQLException e) {
-            LOG.error("Something went wrong: " + e.getMessage());
+            LOG.error("Something goes wrong: ", e);
             e.printStackTrace();
         }
+
         okButton.setDisable(false);
+    }
+    protected static void setIsNewFood(boolean isNewFood) {
+        ControlHandleFoodDetail.isNewFood = isNewFood;
+    }
+    public static void setRowModifyRecord(int rowModifyRecord) {
+        ControlHandleFoodDetail.rowModifyRecord = rowModifyRecord;
     }
 
 }

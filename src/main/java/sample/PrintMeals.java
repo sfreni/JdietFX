@@ -100,7 +100,7 @@ public class PrintMeals {
         doc.add(table);
 
         doc.close();
-        Desktop.getDesktop().open(new File("column_width_example.pdf"));
+        Desktop.getDesktop().open(new File("elenco_pasti.pdf"));
 
     }
 

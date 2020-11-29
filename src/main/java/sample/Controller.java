@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -35,7 +34,7 @@ public class Controller {
     private static final Logger LOG = LoggerFactory.getLogger(Controller.class);
 
     @FXML
-    protected void handleSubmitButtonAction(ActionEvent event) {
+    protected void handleSubmitButtonAction() {
         String user=userId.getText();
         String password=passwordField.getText();
         String sql = "SELECT USER,PASSWORD FROM " + USER;
@@ -51,7 +50,7 @@ public class Controller {
 
             }
         } catch (SQLException e) {
-            LOG.info("" + e);
+            LOG.info(" " , e);
         }
 
         if (startSoftware) {

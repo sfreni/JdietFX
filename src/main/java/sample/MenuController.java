@@ -74,7 +74,7 @@ public class MenuController {
 
     @FXML
     protected void printDiet(ActionEvent event) throws Exception {
-        PrintMeals printMeals = new PrintMeals("column_width_example.pdf");
+        PrintMeals printMeals = new PrintMeals("elenco_pasti.pdf");
 
         printMeals.manipulatePdf();
 
