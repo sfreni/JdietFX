@@ -233,3 +233,6 @@ DerivedData
 .update-config
 
 Contrib/**/
+/column_width_example.pdf
+/db/data - Copia.sqlite
+/elenco_pasti.pdf
