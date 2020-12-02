@@ -26,9 +26,6 @@ public class MealsTablesController {
     public static final String COLUMN_FAT = "GRA";
     public static final String COLUMN_FIBER = "FIB";
     private static final Logger LOG = LoggerFactory.getLogger(MealsTablesController.class);
-
-
-
     private static Food foodchoose;
 
 
@@ -66,13 +63,7 @@ public class MealsTablesController {
     @FXML
     private TextField filterField;
 
-    public static Food getFoodchoose() {
-        return foodchoose;
-    }
 
-    public static void setFoodchoose(Food foodchoose) {
-        MealsTablesController.foodchoose = foodchoose;
-    }
 
     @FXML
     public void initialize() {
@@ -114,13 +105,13 @@ public class MealsTablesController {
 
         } catch (
                 SQLException e) {
-            LOG.error("Something went wrong: " + e.getMessage());
+            LOG.error("Something went wrong: " , e);
             e.printStackTrace();
         }
 
         FilteredList<Food> filteredData = new FilteredList<>(observableArrayList, p -> true);
 
-        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
+        filterField.textProperty().addListener((observable, oldValue, newValue) ->
             filteredData.setPredicate(food -> {
 
                 if (newValue == null || newValue.isEmpty()) {
@@ -129,13 +120,13 @@ public class MealsTablesController {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                if (food.getUnitFood().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+                if (food.getUnitFood().toLowerCase().contains(lowerCaseFilter)) {
                     return true;
                 }
 
                 return false;
-            });
-        });
+            })
+        );
 
         SortedList<Food> sortedData = new SortedList<>(filteredData);
 
@@ -150,7 +141,7 @@ public class MealsTablesController {
             if(!isEmptySelection) {
                 TablePosition pos = tbDietItems.getSelectionModel().getSelectedCells().get(0);
                 int row = pos.getRow();
-                foodchoose = tbDietItems.getItems().get(row);
+                setFoodchoose(tbDietItems.getItems().get(row));
                 Stage stage = (Stage) tbDietItems.getScene().getWindow();
                 stage.close();
             }else{
@@ -162,7 +153,7 @@ public class MealsTablesController {
         });
 
         cancelButton.setOnAction(e -> {
-            foodchoose=null;
+            setFoodchoose(null);
             Stage stage = (Stage) tbDietItems.getScene().getWindow();
             stage.close();
 
@@ -171,7 +162,13 @@ public class MealsTablesController {
 
 
     }
+    public static Food getFoodchoose() {
+        return foodchoose;
+    }
 
+    public static void setFoodchoose(Food foodchoose) {
+        MealsTablesController.foodchoose = foodchoose;
+    }
 
     public static class Food {
         private final int id;

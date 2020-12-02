@@ -114,7 +114,6 @@ public class DialogModifyMeals {
         cancelButton.setOnAction(e -> {
             Stage stage = (Stage) borderPane.getScene().getWindow();
             stage.close();
-            stage = null;
 
         });
 
@@ -137,7 +136,6 @@ public class DialogModifyMeals {
 
                         Stage stage = (Stage) borderPane.getScene().getWindow();
                         stage.close();
-                        stage = null;
                     }
                 }
         );
@@ -160,7 +158,6 @@ public class DialogModifyMeals {
                     countButton = 0;
                     Stage stage = (Stage) borderPane.getScene().getWindow();
                     stage.close();
-                    stage = null;
                 } else {
                     dialogError("NOME PASTO GIA' ESISTENTE, CAMBIARE IL NOME!");
                 }
@@ -262,9 +259,9 @@ public class DialogModifyMeals {
             Button search1 = new Button();
             search1.setText("Cerca");
 
-            search1.setOnAction(e -> {
+            search1.setOnAction(event -> {
                 pressButton = buttonPressed;
-                searchMeals(e);
+                searchMeals(event);
 
             });
 
@@ -490,7 +487,7 @@ public class DialogModifyMeals {
     private void modifyTextFields() {
         int countTextField = 0;
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             Statement statementSearchMeal = conn.createStatement();
+             Statement statementSearchMeal = conn.createStatement()
         ) {
             String sqlMeal = STRING_INIT_SELECT + MEALS_CONFIG + WHERE_STRING + COLUMN_ID_MEALS + " = " + DialogController.getMealChoose().getIdMeal() + "  ORDER BY " + COLUMN_ID + " ASC";
             ResultSet rsMeal = statementSearchMeal.executeQuery(sqlMeal);
@@ -510,7 +507,7 @@ public class DialogModifyMeals {
 
     private int fillTextField(int countTextField, ResultSet rsMeal) {
         try (Connection connFood = DriverManager.getConnection(CONNECTION_STRING);
-             Statement statementSearchFood = connFood.createStatement();) {
+             Statement statementSearchFood = connFood.createStatement()) {
             addTextFields();
             String sqlFood = STRING_INIT_SELECT + ALIMENTI + WHERE_STRING + COLUMN_ID_ALIM + " = " + rsMeal.getInt(COLUMN_ID_FOOD);
 
@@ -541,7 +538,7 @@ public class DialogModifyMeals {
 
     private void loadHeaders() {
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             Statement statementSearchMeal = conn.createStatement();) {
+             Statement statementSearchMeal = conn.createStatement()) {
 
             String sqlMeal = STRING_INIT_SELECT + MEALS + WHERE_STRING + COLUMN_ID + " = " + DialogController.getMealChoose().getIdMeal();
             ResultSet rsMeal = statementSearchMeal.executeQuery(sqlMeal);
@@ -562,7 +559,7 @@ public class DialogModifyMeals {
 
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
              Statement statementDelete = conn.createStatement();
-             Statement statementDeleteMeal = conn.createStatement();
+             Statement statementDeleteMeal = conn.createStatement()
         ) {
             String sqlDeleteMealConfig = "DELETE FROM " + MEALS_CONFIG + "  WHERE " + COLUMN_ID_MEALS + " = " + DialogController.getMealChoose().getIdMeal();
             statementDelete.execute(sqlDeleteMealConfig);
@@ -579,7 +576,7 @@ public class DialogModifyMeals {
                 + "'";
 
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             Statement statementSearch = conn.createStatement();) {
+             Statement statementSearch = conn.createStatement()) {
             if (!isNewMeal) {
                 sql += " AND " + COLUMN_ID + " != " + DialogController.getMealChoose().getIdMeal();
             }

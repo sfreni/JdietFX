@@ -39,7 +39,7 @@ public class MenuController {
             newStage.setTitle("Gestisci Dieta");
             newStage.showAndWait();
         } catch (IOException e) {
-            LOG.error(""+ e);
+            LOG.error("", e);
         }
     }
 
@@ -58,7 +58,7 @@ public class MenuController {
             newStage.setTitle("Gestisci Alimenti");
             newStage.showAndWait();
         } catch (IOException e) {
-            LOG.error(""+ e);
+            LOG.error("", e);
         }
 
 
@@ -94,7 +94,7 @@ public class MenuController {
             newStage.setTitle("Dati Utente");
             newStage.showAndWait();
         } catch (IOException e) {
-            LOG.error(""+ e);
+            LOG.error("", e);
         }
 
     }

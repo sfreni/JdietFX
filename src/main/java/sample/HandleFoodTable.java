@@ -11,7 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
@@ -39,54 +38,43 @@ public class HandleFoodTable {
     public static final String COLUMN_FAT = "GRA";
     public static final String COLUMN_FIBER = "FIB";
     private static final Logger LOG = LoggerFactory.getLogger(HandleFoodTable.class);
+    public static final String STRING_DIALOG_ERROR = "Couldn't load the dialog";
 
-    public static Food foodchoose;
+
     @FXML
     private TableView<Food> tbDietItems;
 
     @FXML
-    public TableColumn<Food, Integer> id;
+    private TableColumn<Food, Integer> id;
 
     @FXML
-    public TableColumn<Food, String> unitFood;
+    private TableColumn<Food, String> unitFood;
 
     @FXML
-    public TableColumn<Food, Integer> totKcal;
+    private TableColumn<Food, Integer> totKcal;
 
     @FXML
-    public TableColumn<Food, Integer> grCarboidrati;
+    private TableColumn<Food, Integer> grCarboidrati;
 
     @FXML
-    public TableColumn<Food, Integer> grProtein;
+    private TableColumn<Food, Integer> grProtein;
 
     @FXML
-    public TableColumn<Food, Integer> grGrassi;
+    private TableColumn<Food, Integer> grGrassi;
 
     @FXML
-    public TableColumn<Food, Integer> grFiber;
+    private TableColumn<Food, Integer> grFiber;
 
     @FXML
-    public AnchorPane anchorPane;
-
-    @FXML
-    public Button addButton;
-
-    @FXML
-    public Button cancelButton;
-
-    @FXML
-    protected Button modifyButton;
-
-    @FXML
-    protected Button deleteButton;
+    private Button cancelButton;
 
 
     @FXML
-    protected Button sampleButton;
+    private  Button deleteButton;
 
 
     @FXML
-    private TextField filterField;
+    private  TextField filterField;
 
     @FXML
 
@@ -121,7 +109,7 @@ public class HandleFoodTable {
                                 ControlHandleFoodDetail.setIsNewFood(false);
                                 ControlHandleFoodDetail.deleteData();
                             } catch (Exception ex) {
-                                LOG.error("Couldn't load the dialog");
+                                LOG.error(STRING_DIALOG_ERROR);
                                 ex.printStackTrace();
                             }
                         }
@@ -140,7 +128,7 @@ public class HandleFoodTable {
         cancelButton.setOnAction(e -> {
             Stage stage = (Stage) tbDietItems.getScene().getWindow();
             stage.close();
-            stage = null;
+
         });
     }
 
@@ -149,7 +137,7 @@ public class HandleFoodTable {
         observableArrayList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM " + ALIMENTI + " ORDER BY " + COLUMN_ALIMENTO + " COLLATE NOCASE ASC ";
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-             ResultSet results = conn.createStatement().executeQuery(sql);) {
+             ResultSet results = conn.createStatement().executeQuery(sql)) {
 
             while (results.next()) {
 
@@ -170,14 +158,13 @@ public class HandleFoodTable {
 
         } catch (
                 SQLException e) {
-            LOG.error("Something went wrong: " + e.getMessage());
+            LOG.error("Something went wrong: ", e);
             e.printStackTrace();
         }
 
         FilteredList<Food> filteredData = new FilteredList<>(observableArrayList, p -> true);
 
-        filterField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filteredData.setPredicate(food -> {
+        filterField.textProperty().addListener((observable, oldValue, newValue) -> filteredData.setPredicate(food -> {
                 if (newValue == null || newValue.isEmpty()) {
                     return true;
                 }
@@ -185,9 +172,9 @@ public class HandleFoodTable {
 
                 String lowerCaseFilter = newValue.toLowerCase();
 
-                return food.getUnitFood().toLowerCase().indexOf(lowerCaseFilter) != -1;
-            });
-        });
+                return food.getUnitFood().toLowerCase().contains(lowerCaseFilter);
+            })
+        );
 
 
         SortedList<Food> sortedData = new SortedList<>(filteredData);
@@ -217,7 +204,7 @@ public class HandleFoodTable {
             newStage.showAndWait();
 
         } catch (IOException e) {
-            LOG.error("Couldn't load the dialog");
+            LOG.error(STRING_DIALOG_ERROR);
             e.printStackTrace();
 
         }
@@ -246,11 +233,11 @@ public class HandleFoodTable {
                 newStage.setScene(scene);
                 newStage.showAndWait();
             } catch (IOException e) {
-                LOG.error("Couldn't load the dialog");
+                LOG.error(STRING_DIALOG_ERROR);
                 e.printStackTrace();
             }
 
-            TableView.TableViewSelectionModel selectionModel = tbDietItems.getSelectionModel();
+            TableView.TableViewSelectionModel<Food> selectionModel = tbDietItems.getSelectionModel();
             selectionModel.select(row);
 
         } else {

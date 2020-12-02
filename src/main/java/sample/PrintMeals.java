@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class PrintMeals {
+    public static final String STRING_SELECT = "SELECT * FROM ";
     String nameFile;
     public static final String DB_NAME = "data.sqlite";
     public static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
@@ -71,10 +72,9 @@ public class PrintMeals {
         mealHeaderListGenerator(doc, font, table);
         generateSpace(doc);
 
-
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
              ResultSet searchResult = conn.createStatement().executeQuery(
-                     "SELECT * FROM " + MEALS + " ORDER BY " + COLUMN_HOUR_MEALS + " ASC")) {
+                     STRING_SELECT + MEALS + " ORDER BY " + COLUMN_HOUR_MEALS + " ASC")) {
             while (searchResult.next()) {
                 table = tableSetup();
                 Cell cell = headerMeal(font, searchResult.getString(COLUMN_NAME_MEALS), searchResult.getString(COLUMN_HOUR_MEALS));
@@ -106,12 +106,10 @@ public class PrintMeals {
 
     private double generateTableBody(Document doc, PdfFont font, Table table, ResultSet searchResult) throws SQLException {
         double totKcal=0;
-        String sql = "SELECT * FROM " + MEALS_CONFIG + " WHERE " + COLUMN_ID_MEALS + " = " + searchResult.getInt(COLUMN_ID) + " ORDER BY " + COLUMN_ID + " ASC";
+        String sql = STRING_SELECT + MEALS_CONFIG + " WHERE " + COLUMN_ID_MEALS + " = " + searchResult.getInt(COLUMN_ID) + " ORDER BY " + COLUMN_ID + " ASC";
         try (Connection connDetails = DriverManager.getConnection(CONNECTION_STRING);
              Statement statementSearchDetails = connDetails.createStatement();
-             ResultSet resultsDetails = statementSearchDetails.executeQuery(sql);
-
-        ) {
+             ResultSet resultsDetails = statementSearchDetails.executeQuery(sql)) {
 
 
             while (resultsDetails.next()) {
@@ -134,12 +132,6 @@ public class PrintMeals {
         table.setMarginTop(0);
         table.setMarginBottom(0);
         return table;
-    }
-
-    double resetKcalCounter() {
-        double totKcal;
-        totKcal = 0;
-        return totKcal;
     }
 
     private void totalKcalGenerator(double totKcal, PdfFont font, Table table) {
@@ -172,9 +164,9 @@ public class PrintMeals {
         table.setMarginBottom(0);
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDateTime now = LocalDateTime.now();
-        String sqlUserData = "SELECT * FROM " + USER;
+        String sqlUserData = STRING_SELECT + USER;
         try (Connection connDetailsFood = DriverManager.getConnection(CONNECTION_STRING);
-             ResultSet resultsUserData = connDetailsFood.createStatement().executeQuery(sqlUserData);) {
+             ResultSet resultsUserData = connDetailsFood.createStatement().executeQuery(sqlUserData)) {
 
 
             if (resultsUserData.next()) {
@@ -204,7 +196,7 @@ public class PrintMeals {
 
             }
         }catch(SQLException ex){
-            LOG.error("Error: " + ex);
+            LOG.error("Error: " , ex);
         }
 
 
@@ -215,11 +207,10 @@ public class PrintMeals {
 
     private double bodyMeals(Table table, ResultSet resultsDetails) throws SQLException {
         double sumKcal = 0;
-        String sqlDetailsFood = "SELECT * FROM " + ALIMENTI + " WHERE " + COLUMN_ID_ALIM + " = " + resultsDetails.getInt(COLUMN_ID_FOOD);
+        String sqlDetailsFood = STRING_SELECT + ALIMENTI + " WHERE " + COLUMN_ID_ALIM + " = " + resultsDetails.getInt(COLUMN_ID_FOOD);
         try (Connection connDetailsFood = DriverManager.getConnection(CONNECTION_STRING);
              Statement statementSearchDetailsFood = connDetailsFood.createStatement();
-             ResultSet resultsDetailsFood = statementSearchDetailsFood.executeQuery(sqlDetailsFood);
-        ) {
+             ResultSet resultsDetailsFood = statementSearchDetailsFood.executeQuery(sqlDetailsFood)) {
 
 
 
