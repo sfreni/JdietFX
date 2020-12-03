@@ -3,7 +3,6 @@ module myJavaFx {
     requires javafx.controls;
     requires javafx.graphics;
     requires java.sql;
-//    requires slf4j.api;
    requires org.jfxtras.styles.jmetro;
     requires kernel;
     requires io;
