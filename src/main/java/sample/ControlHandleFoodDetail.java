@@ -28,46 +28,34 @@ public class ControlHandleFoodDetail {
     public static final String COLUMN_ID_FOOD = "ID_FOOD";
     private static boolean isNewFood;
     private static int rowModifyRecord;
-    int textValueFocusIn;
+    private int textValueFocusIn;
     PreparedStatement query;
     private static final Logger LOG = LoggerFactory.getLogger(ControlHandleFoodDetail.class);
 
-    @FXML
-    protected AnchorPane anchorPane;
+    @FXML    private AnchorPane anchorPane;
 
-    @FXML
-    protected TextField nameFood;
+    @FXML    private TextField nameFood;
 
-    @FXML
-    protected TextField carboFood;
+    @FXML    private TextField carboFood;
 
-    @FXML
-    protected TextField protFood;
+    @FXML    private TextField protFood;
 
-    @FXML
-    protected TextField fatFood;
+    @FXML    private TextField fatFood;
 
-    @FXML
-    protected TextField fiberFood;
+    @FXML    private TextField fiberFood;
 
-    @FXML
-    protected TextField totKcal;
+    @FXML    private TextField totKcal;
+
+    @FXML    private Button okButton;
+
+    @FXML    private Button cancelButton;
 
 
-    @FXML
-    protected Button okButton;
-
-    @FXML
-    protected Button cancelButton;
-
-
-    @FXML
-    public Button deleteButton;
+    @FXML    private Button deleteButton;
 
 
 
-    @FXML
-    public void initialize() {
+    @FXML     public void initialize() {
         nameFood.setPromptText("Inserire il nome dell' alimento");
         nameFood.focusedProperty().addListener((obs, oldVal, inFocus) -> {
             if (!inFocus && !nameFood.getText().equals("")) {

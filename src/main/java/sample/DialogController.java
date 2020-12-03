@@ -40,26 +40,26 @@ public class DialogController {
 
 
     @FXML
-    protected TableView<Meal> tbMealsItems;
+    private TableView<Meal> tbMealsItems;
 
     @FXML
-    protected TableColumn<Meal, Integer> id;
+    private TableColumn<Meal, Integer> id;
     @FXML
-    protected TableColumn<Meal, String> meals;
+    private TableColumn<Meal, String> meals;
     @FXML
-    protected TableColumn<Meal, Integer> mealsHour;
+    private TableColumn<Meal, Integer> mealsHour;
     @FXML
-    protected TableColumn<Meal, Integer> totKCal;
+    private TableColumn<Meal, Integer> totKCal;
     @FXML
-    protected TableColumn<Meal, Integer> grCarboidrati;
+    private TableColumn<Meal, Integer> grCarboidrati;
     @FXML
-    protected TableColumn<Meal, Integer> grProtein;
+    private TableColumn<Meal, Integer> grProtein;
     @FXML
-    protected TableColumn<Meal, Integer> grGrassi;
+    private TableColumn<Meal, Integer> grGrassi;
     @FXML
-    protected TableColumn<Meal, Integer> grFibre;
+    private TableColumn<Meal, Integer> grFibre;
     @FXML
-    protected TextField tkcalOverall;
+    private TextField tkcalOverall;
 
 
     @FXML

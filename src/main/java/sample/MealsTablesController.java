@@ -29,39 +29,28 @@ public class MealsTablesController {
     private static Food foodchoose;
 
 
-    @FXML
-    private TableView<Food> tbDietItems;
+    @FXML     private TableView<Food> tbDietItems;
 
-    @FXML
-    public TableColumn<Food, Integer> id;
+    @FXML    private TableColumn<Food, Integer> id;
 
-    @FXML
-    public TableColumn<Food, String> unitFood;
+    @FXML    private TableColumn<Food, String> unitFood;
 
-    @FXML
-    public TableColumn<Food, Integer> totKcal;
+    @FXML    private TableColumn<Food, Integer> totKcal;
 
-    @FXML
-    public TableColumn<Food, Integer> grCarboidrati;
+    @FXML    private TableColumn<Food, Integer> grCarboidrati;
 
-    @FXML
-    public TableColumn<Food, Integer> grProtein;
+    @FXML    private TableColumn<Food, Integer> grProtein;
 
-    @FXML
-    public TableColumn<Food, Integer> grGrassi;
+    @FXML    private TableColumn<Food, Integer> grGrassi;
 
-    @FXML
-    public TableColumn<Food, Integer> grFibre;
+    @FXML    private TableColumn<Food, Integer> grFibre;
 
-    @FXML
-    public Button okButton;
+    @FXML    private Button okButton;
 
-    @FXML
-    public Button cancelButton;
+    @FXML    private Button cancelButton;
 
 
-    @FXML
-    private TextField filterField;
+    @FXML    private TextField filterField;
 
 
 

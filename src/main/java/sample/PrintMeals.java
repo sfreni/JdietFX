@@ -25,7 +25,6 @@ import java.time.format.DateTimeFormatter;
 
 public class PrintMeals {
     public static final String STRING_SELECT = "SELECT * FROM ";
-    String nameFile;
     public static final String DB_NAME = "data.sqlite";
     public static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
     public static final String MEALS = "MEALS";
@@ -52,12 +51,12 @@ public class PrintMeals {
     public static final String USER = "USER";
 
     private static final Logger LOG = LoggerFactory.getLogger(PrintMeals.class);
+    private String nameFile;
 
     public PrintMeals(String nameFile) {
             this.nameFile=nameFile;
 
     }
-
 
 
     protected void manipulatePdf() throws Exception {

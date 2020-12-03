@@ -22,10 +22,8 @@ import java.sql.SQLException;
 
 public class Controller {
 
-    @FXML
-    private TextField userId;
-    @FXML
-    private TextField passwordField;
+    @FXML private TextField userId;
+    @FXML private TextField passwordField;
     public static final String DB_NAME = "data.sqlite";
     public static final String CONNECTION_STRING = "jdbc:sqlite:db/" + DB_NAME;
     public static final String USER = "USER";
@@ -33,8 +31,7 @@ public class Controller {
     public static final String COLUMN_PASSWORD = "Password";
     private static final Logger LOG = LoggerFactory.getLogger(Controller.class);
 
-    @FXML
-    protected void handleSubmitButtonAction() {
+    @FXML protected void handleSubmitButtonAction() {
         String user=userId.getText();
         String password=passwordField.getText();
         String sql = "SELECT USER,PASSWORD FROM " + USER;

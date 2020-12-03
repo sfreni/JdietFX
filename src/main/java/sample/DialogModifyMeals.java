@@ -58,36 +58,27 @@ public class DialogModifyMeals {
     private String nameMealsValue;
     private static final Logger LOG = LoggerFactory.getLogger(DialogModifyMeals.class);
 
-    @FXML
-    protected BorderPane borderPane;
+    @FXML    private  BorderPane borderPane;
 
-    @FXML
-    protected TextField hour;
+    @FXML    private TextField hour;
 
 
-    @FXML
-    private VBox vboxMeals;
+    @FXML    private VBox vboxMeals;
 
-    @FXML
-    protected TextField nameMeals;
+    @FXML    private TextField nameMeals;
 
 
-    @FXML
-    protected TextField totKcalOverall;
+    @FXML     private TextField totKcalOverall;
 
-    @FXML
-    protected Button okButton;
+    @FXML    private Button okButton;
 
-    @FXML
-    protected Button cancelButton;
+    @FXML    private Button cancelButton;
 
 
-    @FXML
-    protected Button deleteButton;
+    @FXML    private Button deleteButton;
 
 
-    @FXML
-    public void initialize() {
+    @FXML     public void initialize() {
         hboxList = new ArrayList<>();
         countButton = 0;
         checkIsNewMeal();

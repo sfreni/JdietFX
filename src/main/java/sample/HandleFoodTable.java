@@ -41,44 +41,31 @@ public class HandleFoodTable {
     public static final String STRING_DIALOG_ERROR = "Couldn't load the dialog";
 
 
-    @FXML
-    private TableView<Food> tbDietItems;
+    @FXML     private TableView<Food> tbDietItems;
 
-    @FXML
-    private TableColumn<Food, Integer> id;
+    @FXML    private TableColumn<Food, Integer> id;
 
-    @FXML
-    private TableColumn<Food, String> unitFood;
+    @FXML    private TableColumn<Food, String> unitFood;
 
-    @FXML
-    private TableColumn<Food, Integer> totKcal;
+    @FXML    private TableColumn<Food, Integer> totKcal;
 
-    @FXML
-    private TableColumn<Food, Integer> grCarboidrati;
+    @FXML    private TableColumn<Food, Integer> grCarboidrati;
 
-    @FXML
-    private TableColumn<Food, Integer> grProtein;
+    @FXML    private TableColumn<Food, Integer> grProtein;
 
-    @FXML
-    private TableColumn<Food, Integer> grGrassi;
+    @FXML    private TableColumn<Food, Integer> grGrassi;
 
-    @FXML
-    private TableColumn<Food, Integer> grFiber;
+    @FXML    private TableColumn<Food, Integer> grFiber;
 
-    @FXML
-    private Button cancelButton;
+    @FXML    private Button cancelButton;
 
 
-    @FXML
-    private  Button deleteButton;
+    @FXML    private  Button deleteButton;
 
 
-    @FXML
-    private  TextField filterField;
+    @FXML    private  TextField filterField;
 
-    @FXML
-
-    public void initialize() {
+    @FXML    public void initialize() {
 
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         unitFood.setCellValueFactory(new PropertyValueFactory<>("unitFood"));

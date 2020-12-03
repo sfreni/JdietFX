@@ -25,7 +25,7 @@ public class ControllerUserData {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ControllerUserData.class);
-    int textValueFocusIn;
+    private int textValueFocusIn;
     PreparedStatement query;
 
 
