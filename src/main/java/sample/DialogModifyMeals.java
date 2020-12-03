@@ -1,6 +1,6 @@
 package sample;
 
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -193,7 +193,7 @@ public class DialogModifyMeals {
 
 
     @FXML
-    protected void searchMeals(ActionEvent event) {
+    protected void searchMeals() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("tableViews.fxml"));
         try {
@@ -252,7 +252,7 @@ public class DialogModifyMeals {
 
             search1.setOnAction(event -> {
                 pressButton = buttonPressed;
-                searchMeals(event);
+                searchMeals();
 
             });
 

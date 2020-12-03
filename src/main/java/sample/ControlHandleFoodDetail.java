@@ -87,7 +87,7 @@ public class ControlHandleFoodDetail {
                 savingData();
                 Stage stage = (Stage) anchorPane.getScene().getWindow();
                 stage.close();
-                stage = null;
+
             }
         });
 
@@ -102,7 +102,6 @@ public class ControlHandleFoodDetail {
                         deleteData();
                         Stage stage = (Stage) anchorPane.getScene().getWindow();
                         stage.close();
-                        stage = null;
                     }
 
 
@@ -113,7 +112,6 @@ public class ControlHandleFoodDetail {
         cancelButton.setOnAction(e -> {
             Stage stage = (Stage) anchorPane.getScene().getWindow();
             stage.close();
-            stage = null;
         });
 
         if (!isNewFood) {

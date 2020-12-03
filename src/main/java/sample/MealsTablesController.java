@@ -68,7 +68,7 @@ public class MealsTablesController {
         ObservableList<Food> observableArrayList = FXCollections.observableArrayList();
 
         try (Connection conn = DriverManager.getConnection(CONNECTION_STRING);
-            Statement statement = conn.createStatement();){
+            Statement statement = conn.createStatement()){
 
             ResultSet results = statement.executeQuery("SELECT * FROM " + ALIMENTI + " ORDER BY "+ COLUMN_ALIMENTO+" COLLATE NOCASE ASC ");
 
