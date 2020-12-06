@@ -3,7 +3,7 @@ module myJavaFx {
     requires javafx.controls;
     requires javafx.graphics;
     requires java.sql;
-   requires org.jfxtras.styles.jmetro;
+    requires org.jfxtras.styles.jmetro;
     requires kernel;
     requires io;
     requires layout;
@@ -11,4 +11,5 @@ module myJavaFx {
     requires org.slf4j;
     opens sample;
 
+    exports sample;
 }
