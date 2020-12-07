@@ -10,51 +10,26 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <name>JDietFx</name>
+
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
                 <configuration>
-                    <release>${maven.compiler.release}</release>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>sample.Main</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-jar-plugin</artifactId>-->
-            <!--                <version>2.4</version>-->
-            <!--                <configuration>-->
-            <!--                    <archive>-->
-            <!--                        <manifest>-->
-            <!--                            <mainClass>sample.Main</mainClass>-->
-            <!--                        </manifest>-->
-
-            <!--                    </archive>-->
-
-            <!--                </configuration>-->
-
-            <!--            </plugin>-->
-
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.5</version>
-                <configuration>
-                    <release>${maven.compiler.release}</release>
-                    <jlinkImageName>JDietFX</jlinkImageName>
-                    <launcher>launcher</launcher>
-                    <!--                  //  <mainClass>hellofx/org.openjfx.MainApp</mainClass>// -->
-                    <mainClass>sample.Main</mainClass>
-                    <source>1.8</source>
-                    <target>1.8</target>
-
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
-
     <properties>
         <itext.version>7.1.13</itext.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -63,10 +38,9 @@
     </properties>
 
     <dependencies>
-        <!-- always needed -->
-        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
 
         <dependency>
+
             <groupId>com.itextpdf</groupId>
             <artifactId>kernel</artifactId>
             <version>${itext.version}</version>
@@ -76,6 +50,7 @@
             <groupId>com.itextpdf</groupId>
             <artifactId>io</artifactId>
             <version>${itext.version}</version>
+
         </dependency>
         <!-- always needed -->
         <dependency>
@@ -89,7 +64,7 @@
             <artifactId>forms</artifactId>
             <version>${itext.version}</version>
         </dependency>
-        <!-- only needed for PDF/A -->
+
 
         <!-- only needed for digital signatures -->
         <dependency>
@@ -157,20 +132,7 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.32.3.2</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.moditect/moditect-maven-plugin -->
 
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>2.0.0-alpha1</version> <!-- 01-Oct-2019 -->
-        </dependency>
-
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.3.0-alpha5</version> <!-- 22-Oct-2019 -->
-        </dependency>
     </dependencies>
 
 </project>
