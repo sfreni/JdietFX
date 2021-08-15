@@ -10,4 +10,4 @@ Lo sviluppo riguarda la gestione della propria dieta impostando gli alimenti nei
 
 E' presente il database degli alimenti inserito con JDBC
 
-Per qualunque informazione contattami per email: stefano@freni.it
+Per qualunque informazione contattami per email: stefano@stefanofreni.com
